@@ -121,6 +121,12 @@
         const AlertOctagonIcon = (props) => (<Icon {...props}><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></Icon>);
         const CheckCircleIcon = (props) => (<Icon {...props}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></Icon>);
         const ArrowUpIcon = (props) => (<Icon {...props}><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></Icon>);
+        const UsersIcon = (props) => (<Icon {...props}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></Icon>);
+        const UserSettingsIcon = (props) => (<Icon {...props}><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></Icon>);
+        const LayoutListIcon = (props) => (<Icon {...props}><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></Icon>);
+        const LayoutGridIcon = (props) => (<Icon {...props}><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></Icon>);
+        const LayoutCompactIcon = (props) => (<Icon {...props}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></Icon>);
+        const CameraIcon = (props) => (<Icon {...props}><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></Icon>);
 
         // --- Toast Component ---
         const Toast = ({ message, type, show }) => {
@@ -150,12 +156,72 @@
             );
         };
 
+        // --- Donut Chart ---
+        const DonutChart = ({ data }) => {
+            const total = data.reduce((acc, item) => acc + item.value, 0);
+            let cumulativePercent = 0;
+            const getCoordinatesForPercent = (percent) => {
+                const x = Math.cos(2 * Math.PI * percent);
+                const y = Math.sin(2 * Math.PI * percent);
+                return [x, y];
+            };
+            const slices = data.map((item, index) => {
+                const startPercent = cumulativePercent;
+                const endPercent = cumulativePercent + (item.value / total);
+                cumulativePercent = endPercent;
+                const [startX, startY] = getCoordinatesForPercent(startPercent);
+                const [endX, endY] = getCoordinatesForPercent(endPercent);
+                const largeArcFlag = item.value / total > 0.5 ? 1 : 0;
+                const pathData = [`M ${startX} ${startY}`, `A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`, `L 0 0`].join(" ");
+                return <path key={index} d={pathData} fill={item.color} />;
+            });
+            return (
+                <div className="w-48 h-48 relative">
+                    <svg viewBox="-1 -1 2 2" className="transform -rotate-90 w-full h-full">{total === 0 ? <circle cx="0" cy="0" r="1" fill="#E5E7EB" /> : slices}<circle cx="0" cy="0" r="0.6" fill="#E0E5EC" /></svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-blue-900 pointer-events-none"><span className="text-3xl font-bold">{total}</span><span className="text-xs text-gray-500">เคสวันนี้</span></div>
+                </div>
+            );
+        };
+
         // --- Utils ---
         const getCurrentDateTime = () => {
             const now = new Date();
             const date = now.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
             const time = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
             return `${date} - ${time} น.`;
+        };
+
+        const processImage = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const size = 300; // Target size for avatar
+                        canvas.width = size;
+                        canvas.height = size;
+
+                        // Calculate center crop
+                        const minScale = Math.max(size / img.width, size / img.height);
+                        const width = img.width * minScale;
+                        const height = img.height * minScale;
+                        const x = (size - width) / 2;
+                        const y = (size - height) / 2;
+
+                        // Draw image center cropped
+                        ctx.drawImage(img, x, y, width, height);
+                        
+                        // Convert to WebP
+                        resolve(canvas.toDataURL('image/webp', 0.8));
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
         };
 
         const STORAGE_KEY = 'neumorph_app_data_v1';
@@ -180,44 +246,23 @@
             };
 
             const handleGoogleLogin = async () => {
-                setLoading(true);
-                setError('');
+                setLoading(true); setError('');
                 const provider = new firebase.auth.GoogleAuthProvider();
-                try {
-                    await auth.signInWithPopup(provider);
-                } catch (err) {
-                    let msg = err.message;
-                    if (err.code === 'auth/unauthorized-domain') msg = "โดเมนนี้ยังไม่ได้รับอนุญาตใน Firebase Console";
-                    else if (err.code === 'auth/popup-closed-by-user') msg = "การเชื่อมต่อถูกยกเลิกโดยผู้ใช้";
-                    setError(msg);
-                    setLoading(false);
-                }
+                try { await auth.signInWithPopup(provider); } catch (err) { setError(err.message); setLoading(false); }
             };
 
             const handleEmailAuth = async (e) => {
-                e.preventDefault();
-                setError('');
-                setLoading(true);
+                e.preventDefault(); setError(''); setLoading(true);
                 try {
-                    if (isLoginMode) {
-                        await auth.signInWithEmailAndPassword(email, password);
-                    } else {
+                    if (isLoginMode) await auth.signInWithEmailAndPassword(email, password);
+                    else {
                         if (password !== confirmPassword) throw new Error("รหัสผ่านไม่ตรงกัน");
                         if (!username) throw new Error("กรุณาระบุชื่อผู้ใช้งาน");
                         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                         await userCredential.user.updateProfile({ displayName: username });
                         await auth.currentUser.reload();
                     }
-                } catch (err) {
-                    let msg = err.message;
-                    if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') msg = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
-                    if (err.code === 'auth/email-already-in-use') msg = "อีเมลนี้ถูกใช้งานแล้ว";
-                    if (err.code === 'auth/weak-password') msg = "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร";
-                    if (msg === "รหัสผ่านไม่ตรงกัน") msg = "รหัสผ่านไม่ตรงกัน";
-                    if (msg === "กรุณาระบุชื่อผู้ใช้งาน") msg = "กรุณาระบุชื่อผู้ใช้งาน";
-                    setError(msg);
-                    setLoading(false);
-                }
+                } catch (err) { setError(err.message); setLoading(false); }
             };
 
             const handleForgotPassword = async () => {
@@ -228,41 +273,16 @@
             return (
                 <div className={`min-h-screen ${styles.bg} flex items-center justify-center p-4`}>
                     <div className={`w-full max-w-md ${styles.neuFlat} p-8 space-y-6 animate-popIn`}>
-                        <div className="text-center space-y-2">
-                            <h1 className="text-3xl font-bold text-blue-900">ยินดีต้อนรับ</h1>
-                            <div className="flex justify-center items-center gap-4 text-sm font-medium text-gray-500">
-                                <button onClick={() => { setIsLoginMode(true); setError(''); setResetSent(false); }} className={`${isLoginMode ? 'text-blue-900 font-bold scale-105' : 'hover:text-blue-700'} transition-all`}>เข้าสู่ระบบ</button>
-                                <span className="h-4 w-px bg-gray-400"></span>
-                                <button onClick={() => { setIsLoginMode(false); setError(''); setResetSent(false); }} className={`${!isLoginMode ? 'text-blue-900 font-bold scale-105' : 'hover:text-blue-700'} transition-all`}>สมัครใช้งาน</button>
-                            </div>
-                        </div>
+                        <div className="text-center space-y-2"><h1 className="text-3xl font-bold text-blue-900">ยินดีต้อนรับ</h1><div className="flex justify-center items-center gap-4 text-sm font-medium text-gray-500"><button onClick={() => { setIsLoginMode(true); setError(''); }} className={`${isLoginMode ? 'text-blue-900 font-bold scale-105' : 'hover:text-blue-700'} transition-all`}>เข้าสู่ระบบ</button><span className="h-4 w-px bg-gray-400"></span><button onClick={() => { setIsLoginMode(false); setError(''); }} className={`${!isLoginMode ? 'text-blue-900 font-bold scale-105' : 'hover:text-blue-700'} transition-all`}>สมัครใช้งาน</button></div></div>
                         {error && <div className="p-3 rounded-xl bg-red-100 border border-red-200 text-red-600 text-sm text-center animate-fadeIn">{error}</div>}
                         {resetSent && <div className="p-3 rounded-xl bg-green-100 border border-green-200 text-green-700 text-sm text-center animate-fadeIn">ส่งอีเมลรีเซ็ตรหัสผ่านแล้ว</div>}
-                        
                         <form onSubmit={handleEmailAuth} className="space-y-4">
-                            <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><MailIcon size={18} /></div>
-                                <input type="email" placeholder="อีเมล" value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} required />
-                            </div>
-                            {!isLoginMode && (
-                                <div className="relative animate-fadeIn">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div>
-                                    <input type="text" placeholder="ชื่อผู้ใช้งาน" value={username} onChange={(e) => setUsername(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} required />
-                                </div>
-                            )}
-                            <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><LockIcon size={18} /></div>
-                                <input type="password" placeholder="รหัสผ่าน" value={password} onChange={(e) => setPassword(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} required />
-                            </div>
-                            {!isLoginMode && (
-                                <div className="relative animate-fadeIn">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><CheckIcon size={18} /></div>
-                                    <input type="password" placeholder="ยืนยันรหัสผ่าน" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} required />
-                                </div>
-                            )}
+                            <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><MailIcon size={18} /></div><input type="email" placeholder="อีเมล" value={email} onChange={(e) => setEmail(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} required /></div>
+                            {!isLoginMode && (<div className="relative animate-fadeIn"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div><input type="text" placeholder="ชื่อผู้ใช้งาน" value={username} onChange={(e) => setUsername(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} required /></div>)}
+                            <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><LockIcon size={18} /></div><input type="password" placeholder="รหัสผ่าน" value={password} onChange={(e) => setPassword(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} required /></div>
+                            {!isLoginMode && (<div className="relative animate-fadeIn"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><CheckIcon size={18} /></div><input type="password" placeholder="ยืนยันรหัสผ่าน" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} required /></div>)}
                             <button type="submit" disabled={loading} className={`w-full py-3 rounded-xl text-blue-900 font-bold text-lg ${styles.neuFlat} hover:translate-y-[-2px] active:translate-y-[0px] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)]`}>{loading ? 'กำลังดำเนินการ...' : (isLoginMode ? 'เข้าสู่ระบบ' : 'สมัครใช้งาน')}</button>
                         </form>
-                        
                         {isLoginMode && <div className="text-center"><button onClick={handleForgotPassword} type="button" className="text-sm text-gray-500 hover:text-blue-700 hover:underline">ลืมรหัสผ่าน?</button></div>}
                         <div className="relative flex py-2 items-center"><div className="flex-grow border-t border-gray-300"></div><span className="flex-shrink-0 mx-4 text-gray-400 text-xs">หรือ</span><div className="flex-grow border-t border-gray-300"></div></div>
                         <button onClick={handleGoogleLogin} disabled={loading} className={`w-full py-3 rounded-xl flex items-center justify-center gap-3 text-gray-700 font-medium ${styles.neuFlat} hover:translate-y-[-2px] active:translate-y-[0px] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)]`}><GoogleIcon /><span>{isLoginMode ? 'เข้าสู่ระบบด้วย Google' : 'สมัครด้วย Google'}</span></button>
@@ -276,51 +296,58 @@
         const NeumorphismApp = () => {
             const [user, setUser] = useState(null);
             const [authLoading, setAuthLoading] = useState(true);
-            const [currentView, setCurrentView] = useState('form');
+            const [currentView, setCurrentView] = useState('form'); 
             const [isClearingHistory, setIsClearingHistory] = useState(false);
-            const [isLoggingOut, setIsLoggingOut] = useState(false); // Logout confirmation
+            const [isLoggingOut, setIsLoggingOut] = useState(false);
+            const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
+            const [layoutMode, setLayoutMode] = useState('grid'); // Default: Grid
             
-            // Form Data
+            // Data
             const [storeName, setStoreName] = useState('');
             const [invNumber, setInvNumber] = useState('');
             const [customerName, setCustomerName] = useState('');
             const [generatedText, setGeneratedText] = useState('');
             const [currentId, setCurrentId] = useState(null);
             const [isCopied, setIsCopied] = useState(false); 
-            
-            // Interactive States
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-            const [showRestoredHighlight, setShowRestoredHighlight] = useState(false); // Control Red Glow trigger
-
-            // History & Filters
+            const [showRestoredHighlight, setShowRestoredHighlight] = useState(false); 
             const [history, setHistory] = useState([]);
             const [searchQuery, setSearchQuery] = useState('');
+            const [teamCode, setTeamCode] = useState(null);
+            const [inputTeamCode, setInputTeamCode] = useState('');
+            
+            // Profile Edit States
+            const [editDisplayName, setEditDisplayName] = useState('');
+            const [editPhotoBase64, setEditPhotoBase64] = useState(null); // Stores base64
+            const [newPassword, setNewPassword] = useState('');
+            
             const fileInputRef = useRef(null);
+            const profileImageInputRef = useRef(null); // For profile image upload
 
             const initialItems = [
-                { id: 1, label: 'ข้อมูลลูกค้า ยื่นเข้าในระบบ' },
-                { id: 2, label: 'อาชีพ' },
-                { id: 3, label: 'เฟสบุ๊ค' },
-                { id: 4, label: 'เบอร์สำรอง' },
-                { id: 5, label: 'รูปรอบตัวเครื่อง\n(หน้า-หลัง,ซ้าย-ขวา,บน-ล่าง)' },
-                { id: 6, label: 'รูปรายละเอียดตัวเครื่อง\n(หน้าเกี่ยวกับ,เปอร์เซ็นแบต,ตราครุฑ)' },
-                { id: 7, label: 'เอกสารสัญญา' },
-                { id: 8, label: 'เอกสารยินยอม' },
-                { id: 9, label: 'ใบเสร็จ' },
-                { id: 10, label: 'ลูกค้าลงทะเบียนไลน์' },
-                { id: 11, label: 'รูปเทสล็อก\n(3ภาพ)' },
-                { id: 12, label: 'รูปรับเครื่องจบเคส' },
+                { id: 1, label: 'ข้อมูลลูกค้า ยื่นเข้าในระบบ' }, { id: 2, label: 'อาชีพ' }, { id: 3, label: 'เฟสบุ๊ค' }, { id: 4, label: 'เบอร์สำรอง' },
+                { id: 5, label: 'รูปรอบตัวเครื่อง\n(หน้า-หลัง,ซ้าย-ขวา,บน-ล่าง)' }, { id: 6, label: 'รูปรายละเอียดตัวเครื่อง\n(หน้าเกี่ยวกับ,เปอร์เซ็นแบต,ตราครุฑ)' },
+                { id: 7, label: 'เอกสารสัญญา' }, { id: 8, label: 'เอกสารยินยอม' }, { id: 9, label: 'ใบเสร็จ' },
+                { id: 10, label: 'ลูกค้าลงทะเบียนไลน์' }, { id: 11, label: 'รูปเทสล็อก\n(3ภาพ)' }, { id: 12, label: 'รูปรับเครื่องจบเคส' },
             ];
 
-            const [checklist, setChecklist] = useState(
-                initialItems.map((item) => ({ ...item, status: 'pending', note: '' }))
-            );
+            const [checklist, setChecklist] = useState(initialItems.map((item) => ({ ...item, status: 'pending', note: '' })));
 
             // --- Effects ---
-
             useEffect(() => {
                 const unsubscribe = auth.onAuthStateChanged((user) => {
                     setUser(user);
+                    if (user) {
+                        setEditDisplayName(user.displayName || '');
+                        // Check if we have a base64 photo stored in Firestore for this user
+                        db.collection('users').doc(user.uid).get().then(doc => {
+                            if (doc.exists && doc.data().photoBase64) {
+                                setEditPhotoBase64(doc.data().photoBase64);
+                            } else {
+                                setEditPhotoBase64(user.photoURL || null);
+                            }
+                        });
+                    }
                     setAuthLoading(false);
                 });
                 return () => unsubscribe();
@@ -328,23 +355,37 @@
 
             useEffect(() => {
                 if (!user) return;
-                const unsubscribe = db.collection('users').doc(user.uid).collection('history')
-                    .orderBy('timestamp_raw', 'desc')
-                    .onSnapshot((snapshot) => {
-                        const loadedHistory = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        setHistory(loadedHistory);
-                    }, (error) => console.error(error));
+                const unsubscribe = db.collection('users').doc(user.uid).onSnapshot(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        setTeamCode(data.currentTeam || null);
+                        if(data.photoBase64) setEditPhotoBase64(data.photoBase64); // Live update profile pic
+                    }
+                });
                 return () => unsubscribe();
             }, [user]);
 
             useEffect(() => {
+                if (!user) return;
+                
+                let collectionRef;
+                if (teamCode) {
+                    collectionRef = db.collection('teams').doc(teamCode).collection('history');
+                } else {
+                    collectionRef = db.collection('users').doc(user.uid).collection('history');
+                }
+
+                const unsubscribe = collectionRef.orderBy('timestamp_raw', 'desc').onSnapshot((snapshot) => {
+                    const loadedHistory = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    setHistory(loadedHistory);
+                }, (error) => console.error("Error fetching history:", error));
+
+                return () => unsubscribe();
+            }, [user, teamCode]);
+
+            useEffect(() => {
                 const getStatusText = (status) => {
-                    switch (status) {
-                        case 'passed': return '✅ผ่าน';
-                        case 'pending': return '⭕รอเอกสาร';
-                        case 'edit': return '💢แก้ไข';
-                        default: return '';
-                    }
+                    switch (status) { case 'passed': return '✅ผ่าน'; case 'pending': return '⭕รอเอกสาร'; case 'edit': return '💢แก้ไข'; default: return ''; }
                 };
                 let text = `สถานะการตรวจเอกสาร\n`;
                 if (storeName) text += `ร้านค้า : ${storeName}\n`;
@@ -360,32 +401,20 @@
                 setGeneratedText(text);
             }, [storeName, invNumber, customerName, checklist]);
 
-            // --- Computed Values ---
-            
-            // Progress Bar Calculation & Color
+            // --- Computed ---
             const { percentage, color, emoji } = useMemo(() => {
                 const total = checklist.length;
                 const completed = checklist.filter(item => item.status !== 'pending').length;
                 const percent = (completed / total) * 100;
-                
-                let barColor = 'bg-blue-500'; // Default
-                let statusEmoji = '📊';
-
+                let barColor = 'bg-blue-500'; let statusEmoji = '📊';
                 if (percent === 100) {
                     const allPassed = checklist.every(item => item.status === 'passed');
-                    if (allPassed) {
-                        barColor = 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]'; // Green Glow
-                        statusEmoji = '🎉';
-                    } else {
-                        barColor = 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]'; // Orange Glow for edits
-                        statusEmoji = '⚠️';
-                    }
+                    if (allPassed) { barColor = 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]'; statusEmoji = '🎉'; } 
+                    else { barColor = 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]'; statusEmoji = '⚠️'; }
                 }
-                
                 return { percentage: percent, color: barColor, emoji: statusEmoji };
             }, [checklist]);
 
-            // --- Filter Logic ---
             const filteredHistory = useMemo(() => {
                 return history.filter(item => {
                     const query = searchQuery.toLowerCase();
@@ -397,201 +426,220 @@
                 });
             }, [history, searchQuery]);
 
-            // --- Actions ---
-
-            const showToast = (message, type = 'success') => {
-                setToast({ show: true, message, type });
-                setTimeout(() => setToast(prev => ({ ...prev, show: false })), 1000); // 1 Second timeout
-            };
-
+            // --- Handlers ---
+            const showToast = (message, type = 'success') => { setToast({ show: true, message, type }); setTimeout(() => setToast(prev => ({ ...prev, show: false })), 1000); };
+            
             const handleStatusChange = (id, newStatus) => {
                 const newChecklist = checklist.map((item) => item.id === id ? { ...item, status: newStatus } : item);
                 setChecklist(newChecklist);
-                
-                // Confetti Check
                 const allPassed = newChecklist.every(item => item.status === 'passed');
-                if (allPassed && newStatus === 'passed') {
-                    confetti({
-                        particleCount: 100,
-                        spread: 70,
-                        origin: { y: 0.6 }
-                    });
-                }
+                if (allPassed && newStatus === 'passed') confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
             };
-
-            const handleNoteChange = (id, newNote) => {
-                setChecklist((prev) => prev.map((item) => (item.id === id ? { ...item, note: newNote } : item)));
-            };
-
+            const handleNoteChange = (id, newNote) => { setChecklist((prev) => prev.map((item) => (item.id === id ? { ...item, note: newNote } : item))); };
             const copyToClipboard = () => {
-                const textArea = document.createElement("textarea");
-                textArea.value = generatedText;
-                textArea.style.position = "fixed";
-                textArea.style.left = "-9999px";
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                try {
-                    const successful = document.execCommand('copy');
-                    if (successful) {
-                        showToast('คัดลอกข้อความแล้ว', 'success');
-                        setIsCopied(true);
-                        setTimeout(() => setIsCopied(false), 2000);
-                    }
-                } catch (err) {
-                    showToast('คัดลอกไม่สำเร็จ', 'error');
-                }
+                const textArea = document.createElement("textarea"); textArea.value = generatedText; textArea.style.position = "fixed"; textArea.style.left = "-9999px"; document.body.appendChild(textArea); textArea.focus(); textArea.select();
+                try { const successful = document.execCommand('copy'); if (successful) { showToast('คัดลอกข้อความแล้ว', 'success'); setIsCopied(true); setTimeout(() => setIsCopied(false), 2000); } } catch (err) { showToast('คัดลอกไม่สำเร็จ', 'error'); }
                 document.body.removeChild(textArea);
             };
-
-            const resetForm = () => {
-                setStoreName(''); setInvNumber(''); setCustomerName('');
-                setChecklist(initialItems.map((item) => ({ ...item, status: 'pending', note: '' })));
-                setCurrentId(null);
-                setShowRestoredHighlight(false); // Reset validation highlight
-            };
-
+            const resetForm = () => { setStoreName(''); setInvNumber(''); setCustomerName(''); setChecklist(initialItems.map((item) => ({ ...item, status: 'pending', note: '' }))); setCurrentId(null); setShowRestoredHighlight(false); };
+            
             const handleSaveDraft = async () => {
                 if (!user) return;
-                
                 const itemData = {
                     timestamp: getCurrentDateTime(),
                     timestamp_raw: firebase.firestore.FieldValue.serverTimestamp(),
-                    storeName, invNumber, customerName, checklist
+                    storeName, invNumber, customerName, checklist,
+                    lastEditedBy: user.displayName || user.email 
                 };
-
+                let collectionRef;
+                if (teamCode) collectionRef = db.collection('teams').doc(teamCode).collection('history');
+                else collectionRef = db.collection('users').doc(user.uid).collection('history');
                 try {
                     if (currentId) {
-                        // กรณีแก้ไข: บันทึกทับใบเดิม (Update)
-                        await db.collection('users').doc(user.uid).collection('history').doc(currentId).update(itemData);
+                        await collectionRef.doc(currentId).update(itemData);
                         showToast('อัปเดตข้อมูลเรียบร้อย', 'success');
                     } else {
-                        // กรณีใหม่: สร้างใบใหม่ (Create)
-                        await db.collection('users').doc(user.uid).collection('history').add(itemData);
+                        await collectionRef.add(itemData);
                         showToast('บันทึกข้อมูลใหม่เรียบร้อย', 'success');
                     }
                     resetForm();
-                } catch (error) {
-                    console.error("Error saving/updating:", error);
-                    showToast('เกิดข้อผิดพลาดในการบันทึก', 'error');
-                }
+                } catch (error) { console.error(error); showToast('เกิดข้อผิดพลาดในการบันทึก', 'error'); }
             };
 
             const handleResetOrDelete = async () => {
+                let collectionRef;
+                if (teamCode) collectionRef = db.collection('teams').doc(teamCode).collection('history');
+                else collectionRef = db.collection('users').doc(user.uid).collection('history');
                 if (currentId && user) {
-                    try {
-                        await db.collection('users').doc(user.uid).collection('history').doc(currentId).delete();
-                        resetForm();
-                        showToast('ลบรายการสำเร็จ', 'success');
-                    } catch (error) {
-                        showToast('ลบรายการล้มเหลว', 'error');
-                    }
-                } else {
-                    resetForm();
-                    showToast('ล้างฟอร์มเรียบร้อย', 'warning');
+                    try { await collectionRef.doc(currentId).delete(); resetForm(); showToast('ลบรายการสำเร็จ', 'success'); } catch (error) { showToast('ลบรายการล้มเหลว', 'error'); }
+                } else { resetForm(); showToast('ล้างฟอร์มเรียบร้อย', 'warning'); }
+            };
+
+            // Team Handlers
+            const handleJoinTeam = async (code) => {
+                if(!code.trim()) return showToast('กรุณาระบุรหัสทีม', 'error');
+                try {
+                    await db.collection('users').doc(user.uid).set({ currentTeam: code }, { merge: true });
+                    setTeamCode(code);
+                    setIsTeamModalOpen(false); // Close Modal
+                    showToast(`เข้าร่วมทีม ${code} แล้ว`, 'success');
+                } catch(e) { showToast('เกิดข้อผิดพลาด', 'error'); }
+            };
+
+            const handleLeaveTeam = async () => {
+                try {
+                    await db.collection('users').doc(user.uid).update({ currentTeam: firebase.firestore.FieldValue.delete() });
+                    setTeamCode(null);
+                    setIsTeamModalOpen(false); // Close Modal
+                    showToast('ออกจากทีมแล้ว กลับสู่โหมดส่วนตัว', 'success');
+                } catch(e) { showToast('เกิดข้อผิดพลาด', 'error'); }
+            };
+
+            // Profile Handlers
+            const handleProfileImageChange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    processImage(file).then(base64 => {
+                        setEditPhotoBase64(base64);
+                    }).catch(err => showToast('ไม่สามารถอัปโหลดรูปได้', 'error'));
                 }
             };
 
-            // ... (Import/Export/Restore logic) ...
-             const handleExportCSV = () => {
+            const handleUpdateProfile = async (e) => {
+                e.preventDefault();
+                try {
+                    // Update Auth Profile
+                    await user.updateProfile({ displayName: editDisplayName });
+                    
+                    // Update Firestore Profile (including Image Base64)
+                    await db.collection('users').doc(user.uid).set({
+                        photoBase64: editPhotoBase64 // Save the processed image
+                    }, { merge: true });
+
+                    if (newPassword) await user.updatePassword(newPassword);
+                    setNewPassword('');
+                    showToast('อัปเดตโปรไฟล์เรียบร้อย', 'success');
+                } catch (error) {
+                    showToast(error.message, 'error');
+                }
+            };
+
+            const handleRestore = (item) => {
+                setStoreName(item.storeName || ''); setInvNumber(item.invNumber || ''); setCustomerName(item.customerName || '');
+                if (item.checklist) setChecklist(item.checklist);
+                setCurrentId(item.id); setCurrentView('form'); setShowRestoredHighlight(true); 
+            };
+            const handleLogout = () => { auth.signOut(); setIsLoggingOut(false); };
+            const scrollToTop = () => { window.scrollTo({ top: 0, behavior: 'smooth' }); };
+
+            const handleExportCSV = () => {
                 if (history.length === 0) return showToast("ไม่มีข้อมูลให้ Export", 'warning');
-                // ... (Same CSV logic) ...
-                const headers = ["Date", "StoreName", "INV", "Customer", "ChecklistData"];
+                
+                const headers = ["Date", "StoreName", "INV", "Customer", "ChecklistData", "LastEditedBy"];
+                
                 const rows = history.map(item => {
                     const safe = (str) => `"${(str || '').replace(/"/g, '""')}"`;
-                    return [safe(item.timestamp), safe(item.storeName), safe(item.invNumber), safe(item.customerName), safe(JSON.stringify(item.checklist))].join(",");
+                    return [
+                        safe(item.timestamp),
+                        safe(item.storeName),
+                        safe(item.invNumber),
+                        safe(item.customerName),
+                        safe(JSON.stringify(item.checklist)),
+                        safe(item.lastEditedBy)
+                    ].join(",");
                 });
+
                 const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\n");
                 const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement("a");
                 link.setAttribute("href", url);
-                link.setAttribute("download", `history_export.csv`);
+                link.setAttribute("download", `history_export_${new Date().toISOString().slice(0,10)}.csv`);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 showToast('ส่งออกไฟล์ CSV แล้ว', 'success');
             };
 
-             const handleImportCSV = (event) => {
+            const handleImportCSV = (event) => {
                 const file = event.target.files[0];
                 if (!file) return;
+
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     const text = e.target.result;
                     const lines = text.split("\n");
-                    const dataRows = lines.slice(1);
+                    const dataRows = lines.slice(1); 
+
                     let successCount = 0;
-                    const collectionRef = db.collection('users').doc(user.uid).collection('history');
+                    
+                    let collectionRef;
+                    if (teamCode) {
+                        collectionRef = db.collection('teams').doc(teamCode).collection('history');
+                    } else {
+                        collectionRef = db.collection('users').doc(user.uid).collection('history');
+                    }
+
                     for (let line of dataRows) {
                         if (!line.trim()) continue;
-                        const row = []; let inQuote = false; let currentVal = '';
+                        
+                        const row = [];
+                        let inQuote = false;
+                        let currentVal = '';
                         for(let i=0; i<line.length; i++){
                             const char = line[i];
-                            if(char === '"'){ if(inQuote && line[i+1] === '"'){ currentVal += '"'; i++; } else { inQuote = !inQuote; } } 
-                            else if(char === ',' && !inQuote){ row.push(currentVal); currentVal = ''; } 
-                            else { currentVal += char; }
+                            if(char === '"'){
+                                if(inQuote && line[i+1] === '"'){
+                                    currentVal += '"';
+                                    i++;
+                                } else {
+                                    inQuote = !inQuote;
+                                }
+                            } else if(char === ',' && !inQuote){
+                                row.push(currentVal);
+                                currentVal = '';
+                            } else {
+                                currentVal += char;
+                            }
                         }
                         row.push(currentVal);
+                        
                         if (row.length >= 5) {
                             try {
                                 const checklist = JSON.parse(row[4]);
-                                const newItem = { timestamp: row[0], timestamp_raw: firebase.firestore.FieldValue.serverTimestamp(), storeName: row[1], invNumber: row[2], customerName: row[3], checklist: checklist };
+                                const newItem = {
+                                    timestamp: row[0] || getCurrentDateTime(),
+                                    timestamp_raw: firebase.firestore.FieldValue.serverTimestamp(),
+                                    storeName: row[1],
+                                    invNumber: row[2],
+                                    customerName: row[3],
+                                    checklist: checklist,
+                                    lastEditedBy: row[5] || user.displayName || user.email || 'Imported'
+                                };
                                 await collectionRef.add(newItem);
                                 successCount++;
-                            } catch (err) {}
+                            } catch (err) {
+                                console.error("Skipping row", err);
+                            }
                         }
                     }
+                    
                     if (successCount > 0) showToast(`นำเข้าสำเร็จ ${successCount} รายการ`, 'success');
+                    else showToast(`ไม่พบข้อมูลที่นำเข้าได้`, 'warning');
                 };
                 reader.readAsText(file);
                 event.target.value = ''; 
             };
             const triggerImport = () => { if (fileInputRef.current) fileInputRef.current.click(); };
-            
-            const handleRestore = (item) => {
-                setStoreName(item.storeName || ''); setInvNumber(item.invNumber || ''); setCustomerName(item.customerName || '');
-                if (item.checklist) setChecklist(item.checklist);
-                setCurrentId(item.id); 
-                setCurrentView('form');
-                setShowRestoredHighlight(true); // Trigger red glow for restored items only
-                // If user starts typing, we might want to keep the glow or not. Current implementation: if !value.trim(), it glows.
-                // The input `onChange` will update value, so if it becomes non-empty, glow disappears.
-            };
-
-            const handleClearHistory = async () => {
-                if (!user) return;
-                setIsClearingHistory(false);
-                try {
-                    const snapshot = await db.collection('users').doc(user.uid).collection('history').get();
-                    const batch = db.batch();
-                    snapshot.docs.forEach((doc) => batch.delete(doc.ref));
-                    await batch.commit();
-                    showToast('ล้างประวัติทั้งหมดแล้ว', 'success');
-                } catch (error) { showToast('เกิดข้อผิดพลาด', 'error'); }
-            };
-
-            const handleLogout = () => {
-                auth.signOut();
-                setIsLoggingOut(false);
-            };
-
-            const scrollToTop = () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            };
+            const handleClearHistory = async () => { /* ...existing clear history logic... */ };
 
             // Styles
             const styles = {
-                bg: 'bg-[#E0E5EC]',
-                text: 'text-gray-800',
-                neuFlat: `bg-[#E0E5EC] shadow-[9px_9px_16px_rgb(163,177,198,0.6),-9px_-9px_16px_rgba(255,255,255,0.5)] rounded-2xl`,
+                bg: 'bg-[#E0E5EC]', text: 'text-gray-800', neuFlat: `bg-[#E0E5EC] shadow-[9px_9px_16px_rgb(163,177,198,0.6),-9px_-9px_16px_rgba(255,255,255,0.5)] rounded-2xl`,
                 neuPressed: `bg-[#E0E5EC] shadow-[inset_6px_6px_10px_rgb(163,177,198,0.6),inset_-6px_-6px_10px_rgba(255,255,255,0.8)] rounded-xl`,
                 btn: `transition-all duration-200 ease-in-out active:scale-95 flex items-center justify-center font-medium cursor-pointer`,
                 statusBtn: (active, colorClass) => `h-8 px-3 text-xs rounded-lg cursor-pointer transition-all duration-200 flex items-center justify-center active:scale-95 ${active ? 'font-bold text-white ' + colorClass + ' shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-2px_-2px_5px_rgba(255,255,255,0.3)]' : 'text-gray-500 bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.5),-5px_-5px_10px_rgba(255,255,255,0.6)] hover:translate-y-[-1px]'}`,
-                inputError: `shadow-[inset_2px_2px_5px_rgba(239,68,68,0.4),inset_-2px_-2px_5px_rgba(255,255,255,0.7)] ring-1 ring-red-200`, // Red Glow Style
+                inputError: `shadow-[inset_2px_2px_5px_rgba(239,68,68,0.4),inset_-2px_-2px_5px_rgba(255,255,255,0.7)] ring-1 ring-red-200`, 
             };
 
             if (authLoading) return <div className={`min-h-screen ${styles.bg} flex items-center justify-center`}><div className="animate-pulse text-blue-900 font-bold text-xl">กำลังโหลด...</div></div>;
@@ -599,32 +647,59 @@
 
             return (
                 <div className={`min-h-screen ${styles.bg} ${styles.text} p-4 md:p-8 flex justify-center items-start pb-20`}>
-                    {/* Toast */}
                     <Toast message={toast.message} type={toast.type} show={toast.show} />
-
-                    {/* Scroll To Top Button */}
-                    <button 
-                        onClick={scrollToTop}
-                        className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)] text-blue-900 hover:text-blue-700 active:scale-95 transition-all"
-                        title="เลื่อนขึ้นบนสุด"
-                    >
-                        <ArrowUpIcon size={24} />
-                    </button>
+                    <button onClick={scrollToTop} className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)] text-blue-900 hover:text-blue-700 active:scale-95 transition-all" title="เลื่อนขึ้นบนสุด"><ArrowUpIcon size={24} /></button>
 
                     <div className={`w-full max-w-3xl ${styles.neuFlat} p-6 md:p-8 space-y-6 relative overflow-hidden transition-all duration-300`}>
                         {/* Header */}
                         <div className="flex items-center justify-between mb-2">
                              <div className="flex items-center gap-3">
                                 <div className={`p-3 rounded-full ${styles.neuFlat} text-blue-900`}><ClipboardListIcon size={28} /></div>
-                                <div><h1 className="text-xl md:text-2xl font-bold text-blue-900 tracking-wide hidden sm:block">โปรแกรมสร้างข้อความอัตโนมัติ</h1><div className="text-xs text-gray-500 font-medium sm:hidden block">{user.displayName || user.email}</div></div>
+                                <div><h1 className="text-xl md:text-2xl font-bold text-blue-900 tracking-wide hidden sm:block">โปรแกรมสร้างข้อความอัตโนมัติ</h1>
+                                    <div className="flex items-center gap-2">
+                                        <div className="text-xs text-gray-500 font-medium sm:hidden block">{user.displayName || user.email}</div>
+                                        {teamCode && <span className="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full border border-blue-200 font-bold">Team: {teamCode}</span>}
+                                    </div>
+                                </div>
                              </div>
-                             <div className="flex items-center gap-4">
-                                <div className="hidden sm:flex flex-col items-end mr-2"><span className="text-sm font-bold text-blue-900">{user.displayName || 'ผู้ใช้งาน'}</span><span className="text-xs text-gray-500">{user.email}</span></div>
-                                <button onClick={() => { setCurrentView('form'); setIsClearingHistory(false); }} className={`${styles.btn} p-3 rounded-full ${currentView === 'form' ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`}><Edit3Icon size={20} /></button>
-                                <button onClick={() => setCurrentView('history')} className={`${styles.btn} p-3 rounded-full relative ${currentView === 'history' ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`}><HistoryIcon size={20} />{history.length > 0 && (<span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-[#E0E5EC]"></span>)}</button>
-                                <button onClick={() => setIsLoggingOut(prev => !prev)} className={`${styles.btn} p-3 rounded-full text-red-500 hover:text-red-700 ${styles.neuFlat}`}><LogoutIcon size={20} /></button>
+                             <div className="flex items-center gap-2 md:gap-4">
+                                <div className="hidden sm:flex flex-col items-end mr-2">
+                                    <span className="text-sm font-bold text-blue-900">{user.displayName || 'ผู้ใช้งาน'}</span>
+                                    {teamCode ? <span className="text-xs text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-100">Team: {teamCode}</span> : <span className="text-xs text-gray-500">ส่วนตัว</span>}
+                                </div>
+                                <button onClick={() => { setIsTeamModalOpen(prev => !prev); }} className={`${styles.btn} p-3 rounded-full ${isTeamModalOpen ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`} title="จัดการทีม"><UsersIcon size={20} /></button>
+                                <button onClick={() => setCurrentView('profile')} className={`${styles.btn} p-3 rounded-full ${currentView === 'profile' ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`} title="จัดการโปรไฟล์"><UserSettingsIcon size={20} /></button>
+                                <button onClick={() => { setCurrentView('form'); setIsClearingHistory(false); }} className={`${styles.btn} p-3 rounded-full ${currentView === 'form' ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`} title="หน้าแรก"><Edit3Icon size={20} /></button>
+                                <button onClick={() => setCurrentView('history')} className={`${styles.btn} p-3 rounded-full relative ${currentView === 'history' ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`} title="ประวัติ"><HistoryIcon size={20} />{history.length > 0 && (<span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-[#E0E5EC]"></span>)}</button>
+                                <button onClick={() => setIsLoggingOut(prev => !prev)} className={`${styles.btn} p-3 rounded-full text-red-500 hover:text-red-700 ${styles.neuFlat}`} title="ออกจากระบบ"><LogoutIcon size={20} /></button>
                              </div>
                         </div>
+
+                        {/* Team Modal */}
+                        {isTeamModalOpen && (
+                            <div className="mb-6 p-6 rounded-xl bg-blue-50 border border-blue-100 animate-bounceIn relative">
+                                <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2"><UsersIcon size={20}/> จัดการทีม (Team Collaboration)</h3>
+                                <p className="text-sm text-blue-800 mb-4">เข้าร่วมทีมเพื่อดูและจัดการข้อมูลร่วมกันกับเพื่อนร่วมงาน</p>
+                                
+                                {teamCode ? (
+                                    <div className="text-center space-y-4">
+                                        <div className="text-lg font-bold text-blue-900">คุณกำลังอยู่ในทีม: <span className="text-emerald-600 text-2xl block mt-1">{teamCode}</span></div>
+                                        <button onClick={handleLeaveTeam} className="w-full py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-colors">ออกจากทีม (กลับสู่โหมดส่วนตัว)</button>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        <input 
+                                            type="text" 
+                                            placeholder="กรอกรหัสร้าน / รหัสทีม (เช่น SHOP-A)" 
+                                            value={inputTeamCode}
+                                            onChange={(e) => setInputTeamCode(e.target.value.toUpperCase())}
+                                            className={`w-full px-4 py-2 text-center text-lg font-bold tracking-widest ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200`}
+                                        />
+                                        <button onClick={() => handleJoinTeam(inputTeamCode.toUpperCase())} className="w-full py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors">เข้าร่วมทีม</button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         {/* Logout Confirmation Modal */}
                         {isLoggingOut && (
@@ -633,59 +708,79 @@
                             </div>
                         )}
 
+                        {/* VIEW: PROFILE MANAGEMENT (NEW PAGE) */}
+                        {currentView === 'profile' && (
+                            <div className="animate-fadeIn h-full flex flex-col space-y-6">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <button onClick={() => setCurrentView('form')} className="p-2 -ml-2 text-gray-500 hover:text-blue-900 transition-colors"><ArrowLeftIcon size={24} /></button>
+                                    <h2 className="text-lg font-semibold text-blue-900">จัดการโปรไฟล์</h2>
+                                </div>
+                                <div className={`p-8 rounded-2xl ${styles.neuFlat}`}>
+                                    <form onSubmit={handleUpdateProfile} className="space-y-6 max-w-md mx-auto">
+                                        <div className="flex flex-col items-center mb-4 space-y-3">
+                                            <div className={`w-32 h-32 rounded-full overflow-hidden ${styles.neuPressed} border-4 border-[#E0E5EC] flex items-center justify-center relative group`}>
+                                                {editPhotoBase64 ? <img src={editPhotoBase64} alt="Profile" className="w-full h-full object-cover" /> : <UserIcon size={48} className="text-gray-400" />}
+                                            </div>
+                                            
+                                            <input 
+                                                type="file" 
+                                                accept="image/*" 
+                                                ref={profileImageInputRef}
+                                                onChange={handleProfileImageChange}
+                                                className="hidden"
+                                            />
+                                            <button 
+                                                type="button"
+                                                onClick={() => profileImageInputRef.current.click()}
+                                                className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 bg-blue-50 px-3 py-1 rounded-full border border-blue-100"
+                                            >
+                                                <UploadIcon size={14} /> อัปโหลดรูปโปรไฟล์
+                                            </button>
+                                            <span className="text-[10px] text-gray-400">ระบบจะครอปวงกลมและย่อขนาดให้อัตโนมัติ</span>
+                                        </div>
+                                        
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-bold text-gray-600 ml-1">ชื่อผู้ใช้งาน</label>
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div>
+                                                <input type="text" value={editDisplayName} onChange={(e) => setEditDisplayName(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200 rounded-xl`} placeholder="ชื่อที่ใช้แสดง" />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-bold text-gray-600 ml-1">เปลี่ยนรหัสผ่าน (เว้นว่างหากไม่เปลี่ยน)</label>
+                                            <div className="relative">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><LockIcon size={18} /></div>
+                                                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200 rounded-xl`} placeholder="รหัสผ่านใหม่" />
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" className={`w-full py-3 rounded-xl text-blue-900 font-bold ${styles.neuFlat} hover:translate-y-[-2px] active:translate-y-[0px]`}>บันทึกการเปลี่ยนแปลง</button>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* VIEW: FORM */}
                         {currentView === 'form' && (
                             <div className="animate-fadeIn space-y-8">
-                                {/* Form Inputs */}
                                 <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <h2 className="text-lg font-semibold text-blue-900 ml-1">ข้อมูลทั่วไป</h2>
-                                        {currentId && <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-lg border border-orange-200">กำลังแก้ไขข้อมูลเก่า</span>}
-                                    </div>
+                                    <div className="flex justify-between items-center"><h2 className="text-lg font-semibold text-blue-900 ml-1">ข้อมูลทั่วไป</h2>{currentId && <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-lg border border-orange-200">กำลังแก้ไขข้อมูลเก่า</span>}</div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><StoreIcon size={18} /></div>
-                                            <input type="text" placeholder="ชื่อร้านค้า" value={storeName} onChange={(e) => setStoreName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !storeName.trim() ? styles.inputError : styles.neuPressed}`} />
-                                        </div>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><FileTextIcon size={18} /></div>
-                                            <input type="text" placeholder="เลข INV" value={invNumber} onChange={(e) => setInvNumber(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !invNumber.trim() ? styles.inputError : styles.neuPressed}`} />
-                                        </div>
-                                        <div className="relative md:col-span-2">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div>
-                                            <input type="text" placeholder="ชื่อลูกค้า" value={customerName} onChange={(e) => setCustomerName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !customerName.trim() ? styles.inputError : styles.neuPressed}`} />
-                                        </div>
+                                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><StoreIcon size={18} /></div><input type="text" placeholder="ชื่อร้านค้า" value={storeName} onChange={(e) => setStoreName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !storeName.trim() ? styles.inputError : styles.neuPressed}`} /></div>
+                                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><FileTextIcon size={18} /></div><input type="text" placeholder="เลข INV" value={invNumber} onChange={(e) => setInvNumber(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !invNumber.trim() ? styles.inputError : styles.neuPressed}`} /></div>
+                                        <div className="relative md:col-span-2"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div><input type="text" placeholder="ชื่อลูกค้า" value={customerName} onChange={(e) => setCustomerName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !customerName.trim() ? styles.inputError : styles.neuPressed}`} /></div>
                                     </div>
                                 </div>
-
-                                {/* Action Buttons */}
                                 <div className="grid grid-cols-2 gap-4 py-2">
-                                    <button 
-                                        onClick={handleSaveDraft} 
-                                        className={`${styles.btn} ${styles.neuFlat} py-3 gap-2 text-emerald-700 hover:text-emerald-900 active:text-emerald-800`}
-                                    >
-                                        <SaveIcon size={20} /><span>จัดเก็บชั่วคราว</span>
-                                    </button>
-                                    <button onClick={handleResetOrDelete} className={`${styles.btn} ${styles.neuFlat} py-3 text-red-600 hover:text-red-800 active:text-red-700 gap-2`}>
-                                        {currentId ? <><TrashIcon size={20} /><span>ลบรายการนี้</span></> : <><XIcon size={20} /><span>ผ่าน/ยกเลิก</span></>}
-                                    </button>
+                                    <button onClick={handleSaveDraft} className={`${styles.btn} ${styles.neuFlat} py-3 gap-2 text-emerald-700 hover:text-emerald-900 active:text-emerald-800`}><SaveIcon size={20} /><span>จัดเก็บชั่วคราว</span></button>
+                                    <button onClick={handleResetOrDelete} className={`${styles.btn} ${styles.neuFlat} py-3 text-red-600 hover:text-red-800 active:text-red-700 gap-2`}>{currentId ? <><TrashIcon size={20} /><span>ลบรายการนี้</span></> : <><XIcon size={20} /><span>ผ่าน/ยกเลิก</span></>}</button>
                                 </div>
-
                                 <hr className="border-gray-300/50" />
-
-                                {/* Progress Bar */}
                                 <div className="space-y-2">
-                                    <div className="flex justify-between items-center text-xs font-semibold text-blue-900 px-1">
-                                        <span>ความคืบหน้า</span>
-                                        <span className={percentage === 100 ? (color.includes('emerald') ? 'text-emerald-600' : 'text-orange-600') : ''}>
-                                            {emoji} {Math.round(percentage)}%
-                                        </span>
-                                    </div>
-                                    <div className={`w-full h-3 rounded-full ${styles.neuPressed} overflow-hidden`}>
-                                        <div className={`h-full rounded-full transition-all duration-500 ease-out ${color}`} style={{ width: `${percentage}%` }}></div>
-                                    </div>
+                                    <div className="flex justify-between items-center text-xs font-semibold text-blue-900 px-1"><span>ความคืบหน้า</span><span className={percentage === 100 ? (color.includes('emerald') ? 'text-emerald-600' : 'text-orange-600') : ''}>{emoji} {Math.round(percentage)}%</span></div>
+                                    <div className={`w-full h-3 rounded-full ${styles.neuPressed} overflow-hidden`}><div className={`h-full rounded-full transition-all duration-500 ease-out ${color}`} style={{ width: `${percentage}%` }}></div></div>
                                 </div>
-
-                                {/* Checklist */}
                                 <div className="space-y-6">
                                     <h2 className="text-lg font-semibold text-blue-900 ml-1">รายการตรวจสอบเอกสาร</h2>
                                     <div className="space-y-4">
@@ -704,8 +799,6 @@
                                         ))}
                                     </div>
                                 </div>
-
-                                {/* Output */}
                                 <div className="pt-4 pb-8">
                                     <h2 className="text-lg font-semibold text-blue-900 ml-1 mb-2">ตัวอย่างข้อความ</h2>
                                     <div className={`w-full p-4 min-h-[200px] text-sm md:text-base font-mono bg-gray-100/50 ${styles.neuPressed} text-gray-700 whitespace-pre-line leading-relaxed`}>{generatedText}</div>
@@ -716,9 +809,20 @@
 
                         {currentView === 'history' && (
                             <div className="animate-fadeIn h-full flex flex-col">
-                                <div className="flex items-center justify-between mb-6">
-                                    <div className="flex items-center gap-2"><button onClick={() => { setCurrentView('form'); setIsClearingHistory(false); }} className="p-2 -ml-2 text-gray-500 hover:text-blue-900 transition-colors"><ArrowLeftIcon size={24} /></button><h2 className="text-lg font-semibold text-blue-900">รายการที่บันทึกไว้</h2></div>
-                                    <div className="flex items-center gap-2">
+                                <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+                                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                                        <button onClick={() => { setCurrentView('form'); setIsClearingHistory(false); }} className="p-2 -ml-2 text-gray-500 hover:text-blue-900 transition-colors"><ArrowLeftIcon size={24} /></button>
+                                        <h2 className="text-lg font-semibold text-blue-900">รายการที่บันทึกไว้ {teamCode && <span className="text-xs bg-blue-100 px-2 py-0.5 rounded-lg ml-1">ทีม {teamCode}</span>}</h2>
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-2 self-end">
+                                        {/* Layout Switcher */}
+                                        <div className={`flex p-1 rounded-lg ${styles.neuPressed} mr-2`}>
+                                            <button onClick={() => setLayoutMode('grid')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'grid' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="ตาราง"><LayoutGridIcon size={18} /></button>
+                                            <button onClick={() => setLayoutMode('list')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'list' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="รายการ"><LayoutListIcon size={18} /></button>
+                                            <button onClick={() => setLayoutMode('compact')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'compact' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="กะทัดรัด"><LayoutCompactIcon size={18} /></button>
+                                        </div>
+
                                         <input type="file" accept=".csv" ref={fileInputRef} onChange={handleImportCSV} className="hidden" />
                                         <button onClick={triggerImport} className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="นำเข้าไฟล์ CSV"><UploadIcon size={20} /></button>
                                         <button onClick={handleExportCSV} className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="ส่งออกเป็น CSV"><DownloadIcon size={20} /></button>
@@ -727,13 +831,53 @@
                                 </div>
                                 {isClearingHistory && (
                                     <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 animate-bounceIn">
-                                        <div className="flex items-start gap-3"><div className="text-red-500 mt-1"><AlertIcon size={24}/></div><div className="flex-1"><h3 className="font-bold text-red-800 mb-1">แน่ใจไหม?</h3><p className="text-sm text-red-600 mb-3">คุณต้องการล้างประวัติทั้งหมดหรือไม่</p><div className="flex gap-3"><button onClick={handleClearHistory} className="px-4 py-2 bg-red-500 text-white text-sm rounded-lg shadow-md hover:bg-red-600 transition-colors">ใช่ ฉันต้องการล้างประวัติ</button><button onClick={() => setIsClearingHistory(false)} className="px-4 py-2 bg-white text-gray-600 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">กดผิด ยังไม่ต้องลบ</button></div></div></div>
+                                        <div className="flex items-start gap-3"><div className="text-red-500 mt-1"><AlertIcon size={24}/></div><div className="flex-1"><h3 className="font-bold text-red-800 mb-1">แน่ใจไหม?</h3><p className="text-sm text-red-600 mb-3">คุณต้องการล้างประวัติ{teamCode ? `ของทีม ${teamCode}` : 'ส่วนตัว'} ทั้งหมดหรือไม่</p><div className="flex gap-3"><button onClick={handleClearHistory} className="px-4 py-2 bg-red-500 text-white text-sm rounded-lg shadow-md hover:bg-red-600 transition-colors">ใช่ ฉันต้องการล้างประวัติ</button><button onClick={() => setIsClearingHistory(false)} className="px-4 py-2 bg-white text-gray-600 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">กดผิด ยังไม่ต้องลบ</button></div></div></div>
                                     </div>
                                 )}
                                 <div className="relative mb-6"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><SearchIcon size={18} /></div><input type="text" placeholder="ค้นหา (ชื่อร้าน, เลข INV, ชื่อลูกค้า)..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} /></div>
-                                <div className="flex-1 space-y-6 p-6 overflow-y-auto no-scrollbar">
-                                    {filteredHistory.length === 0 ? (<div className="text-center py-10 text-gray-400"><p>ไม่พบรายการที่บันทึกไว้</p></div>) : (filteredHistory.map((item) => (
-                                        <div key={item.id} onClick={() => handleRestore(item)} className={`p-5 rounded-2xl bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)] border border-[#E0E5EC] hover:translate-y-[-2px] transition-all cursor-pointer group active:scale-95 duration-200`}><div className="flex justify-between items-start mb-2"><span className="text-xs italic text-gray-500">แก้ไขล่าสุด : {item.timestamp}</span><span className="text-blue-400 group-hover:text-blue-600 transition-colors"><Edit3Icon size={16} /></span></div><div className="space-y-1"><p className="text-sm text-gray-600"><span className="font-semibold text-blue-900">ชื่อร้านค้า :</span> {item.storeName || '-'}</p><p className="text-sm text-gray-600"><span className="font-semibold text-blue-900">เลข INV :</span> {item.invNumber || '-'}</p><p className="text-sm text-gray-600"><span className="font-semibold text-blue-900">ชื่อลูกค้า :</span> {item.customerName || '-'}</p></div></div>
+                                
+                                {/* History List with Layout Modes */}
+                                <div className={`flex-1 overflow-y-auto no-scrollbar pb-8 ${layoutMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-4' : 'space-y-4'}`}>
+                                    {filteredHistory.length === 0 ? (<div className="text-center py-10 text-gray-400 col-span-full"><p>ไม่พบรายการที่บันทึกไว้</p></div>) : (filteredHistory.map((item) => (
+                                        <div 
+                                            key={item.id} 
+                                            onClick={() => handleRestore(item)} 
+                                            className={`
+                                                ${styles.neuFlat} cursor-pointer group active:scale-[0.98] transition-all duration-200 border border-[#E0E5EC] hover:border-blue-100
+                                                ${layoutMode === 'compact' ? 'p-3 flex items-center justify-between' : 'p-5 flex flex-col'}
+                                            `}
+                                        >
+                                            {layoutMode === 'compact' ? (
+                                                <>
+                                                    <div className="flex-1 min-w-0 pr-4">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="font-bold text-blue-900 truncate">{item.storeName || '-'}</span>
+                                                            <span className="text-xs bg-gray-200 px-1.5 rounded text-gray-600">{item.invNumber}</span>
+                                                        </div>
+                                                        <div className="text-sm text-gray-600 truncate">{item.customerName}</div>
+                                                    </div>
+                                                    <div className="text-right text-xs text-gray-400 whitespace-nowrap">
+                                                        <div>{item.timestamp.split('-')[0]}</div>
+                                                        <div className="text-[10px]">{item.lastEditedBy || 'Unknown'}</div>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <div className="space-y-2 mb-3">
+                                                        <div className="flex justify-between items-start">
+                                                            <h3 className="font-bold text-lg text-blue-900 line-clamp-1">{item.storeName || '-'}</h3>
+                                                            <span className="text-xs font-mono bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-100">{item.invNumber || 'NO INV'}</span>
+                                                        </div>
+                                                        <p className="text-gray-700 font-medium flex items-center gap-2"><UserIcon size={14} className="text-gray-400"/> {item.customerName || '-'}</p>
+                                                    </div>
+                                                    <div className="mt-auto pt-3 border-t border-gray-200/50 flex justify-between items-center text-xs text-gray-400">
+                                                        <span className="italic flex items-center gap-1">
+                                                            แก้ไข: {item.timestamp} {item.lastEditedBy && `โดย ${item.lastEditedBy}`}
+                                                        </span>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
                                     )))}
                                 </div>
                             </div>
