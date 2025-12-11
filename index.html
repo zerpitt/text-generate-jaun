@@ -453,17 +453,27 @@
 
             const handleSaveDraft = async () => {
                 if (!user) return;
-                const newItem = {
+                
+                const itemData = {
                     timestamp: getCurrentDateTime(),
                     timestamp_raw: firebase.firestore.FieldValue.serverTimestamp(),
                     storeName, invNumber, customerName, checklist
                 };
+
                 try {
-                    await db.collection('users').doc(user.uid).collection('history').add(newItem);
+                    if (currentId) {
+                        // กรณีแก้ไข: บันทึกทับใบเดิม (Update)
+                        await db.collection('users').doc(user.uid).collection('history').doc(currentId).update(itemData);
+                        showToast('อัปเดตข้อมูลเรียบร้อย', 'success');
+                    } else {
+                        // กรณีใหม่: สร้างใบใหม่ (Create)
+                        await db.collection('users').doc(user.uid).collection('history').add(itemData);
+                        showToast('บันทึกข้อมูลใหม่เรียบร้อย', 'success');
+                    }
                     resetForm();
-                    showToast('บันทึกข้อมูลสำเร็จ', 'success');
                 } catch (error) {
-                    showToast('บันทึกข้อมูลล้มเหลว', 'error');
+                    console.error("Error saving/updating:", error);
+                    showToast('เกิดข้อผิดพลาดในการบันทึก', 'error');
                 }
             };
 
