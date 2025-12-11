@@ -57,7 +57,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
 
         // --- Firebase Configuration ---
         const firebaseConfig = {
@@ -96,6 +96,8 @@
         const SearchIcon = (props) => (<Icon {...props}><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></Icon>);
         const ArrowLeftIcon = (props) => (<Icon {...props}><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></Icon>);
         const AlertIcon = (props) => (<Icon {...props}><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></Icon>);
+        const DownloadIcon = (props) => (<Icon {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></Icon>);
+        const UploadIcon = (props) => (<Icon {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></Icon>);
         const GoogleIcon = (props) => (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" {...props}>
                 <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
@@ -368,6 +370,9 @@
             // History State
             const [history, setHistory] = useState([]);
             const [searchQuery, setSearchQuery] = useState('');
+            
+            // File input ref for import
+            const fileInputRef = useRef(null);
 
             const initialItems = [
                 { id: 1, label: 'ข้อมูลลูกค้า ยื่นเข้าในระบบ' },
@@ -561,6 +566,102 @@
                     console.error("Error clearing history: ", error);
                     alert("เกิดข้อผิดพลาดในการล้างประวัติ");
                 }
+            };
+
+            // --- EXPORT / IMPORT LOGIC ---
+            const handleExportCSV = () => {
+                if (history.length === 0) return alert("ไม่มีข้อมูลให้ Export");
+
+                const headers = ["Date", "StoreName", "INV", "Customer", "ChecklistData"];
+                
+                const rows = history.map(item => {
+                    const safe = (str) => `"${(str || '').replace(/"/g, '""')}"`;
+                    return [
+                        safe(item.timestamp),
+                        safe(item.storeName),
+                        safe(item.invNumber),
+                        safe(item.customerName),
+                        safe(JSON.stringify(item.checklist))
+                    ].join(",");
+                });
+
+                const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\n");
+                const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.setAttribute("href", url);
+                link.setAttribute("download", `history_export_${new Date().toISOString().slice(0,10)}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            const handleImportCSV = (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const text = e.target.result;
+                    const lines = text.split("\n");
+                    const dataRows = lines.slice(1); // Skip header
+
+                    let successCount = 0;
+                    const collectionRef = db.collection('users').doc(user.uid).collection('history');
+
+                    for (let line of dataRows) {
+                        if (!line.trim()) continue;
+                        
+                        // Simple CSV parser logic for quoted strings
+                        const row = [];
+                        let inQuote = false;
+                        let currentVal = '';
+                        for(let i=0; i<line.length; i++){
+                            const char = line[i];
+                            if(char === '"'){
+                                if(inQuote && line[i+1] === '"'){
+                                    currentVal += '"';
+                                    i++;
+                                } else {
+                                    inQuote = !inQuote;
+                                }
+                            } else if(char === ',' && !inQuote){
+                                row.push(currentVal);
+                                currentVal = '';
+                            } else {
+                                currentVal += char;
+                            }
+                        }
+                        row.push(currentVal);
+                        
+                        // Expected indices: 0:Date, 1:Store, 2:INV, 3:Customer, 4:ChecklistJSON
+                        if (row.length >= 5) {
+                            try {
+                                const checklist = JSON.parse(row[4]);
+                                const newItem = {
+                                    timestamp: row[0] || getCurrentDateTime(),
+                                    timestamp_raw: firebase.firestore.FieldValue.serverTimestamp(),
+                                    storeName: row[1],
+                                    invNumber: row[2],
+                                    customerName: row[3],
+                                    checklist: checklist
+                                };
+                                await collectionRef.add(newItem);
+                                successCount++;
+                            } catch (err) {
+                                console.error("Skipping row", err);
+                            }
+                        }
+                    }
+                    
+                    if (successCount > 0) alert(`นำเข้าข้อมูลสำเร็จ ${successCount} รายการ`);
+                };
+                reader.readAsText(file);
+                event.target.value = ''; 
+            };
+
+            const triggerImport = () => {
+                if (fileInputRef.current) fileInputRef.current.click();
             };
 
             const handleLogout = () => {
@@ -810,17 +911,42 @@
                                         </button>
                                         <h2 className="text-lg font-semibold text-blue-900">รายการที่บันทึกไว้</h2>
                                     </div>
-
-                                    {/* Clear History Button */}
-                                    {history.length > 0 && (
+                                    
+                                    <div className="flex items-center gap-2">
+                                        {/* Import / Export Buttons */}
+                                        <input 
+                                            type="file" 
+                                            accept=".csv"
+                                            ref={fileInputRef}
+                                            onChange={handleImportCSV}
+                                            className="hidden"
+                                        />
                                         <button 
-                                            onClick={() => setIsClearingHistory(true)}
-                                            className="text-red-400 hover:text-red-600 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]"
-                                            title="ล้างประวัติทั้งหมด"
+                                            onClick={triggerImport}
+                                            className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]"
+                                            title="นำเข้าไฟล์ CSV"
                                         >
-                                            <TrashIcon size={20} />
+                                            <UploadIcon size={20} />
                                         </button>
-                                    )}
+                                        <button 
+                                            onClick={handleExportCSV}
+                                            className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]"
+                                            title="ส่งออกเป็น CSV"
+                                        >
+                                            <DownloadIcon size={20} />
+                                        </button>
+
+                                        {/* Clear History Button */}
+                                        {history.length > 0 && (
+                                            <button 
+                                                onClick={() => setIsClearingHistory(true)}
+                                                className="text-red-400 hover:text-red-600 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]"
+                                                title="ล้างประวัติทั้งหมด"
+                                            >
+                                                <TrashIcon size={20} />
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Confirmation Box */}
@@ -875,7 +1001,7 @@
                                             <div 
                                                 key={item.id} 
                                                 onClick={() => handleRestore(item)}
-                                                className={`p-5 rounded-2xl bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)] hover:translate-y-[-2px] transition-all cursor-pointer group`}
+                                                className={`p-5 rounded-2xl bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)] border border-[#E0E5EC] hover:translate-y-[-2px] transition-all cursor-pointer group`}
                                             >
                                                 <div className="flex justify-between items-start mb-2">
                                                     {/* Edited Date Style */}
