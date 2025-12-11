@@ -146,7 +146,13 @@
                     await auth.signInWithPopup(provider);
                     // onLoginSuccess handled by onAuthStateChanged in parent
                 } catch (err) {
-                    setError(err.message);
+                    let msg = err.message;
+                    if (err.code === 'auth/unauthorized-domain') {
+                        msg = "โดเมนนี้ยังไม่ได้รับอนุญาตใน Firebase Console (เมนู Authentication > Settings > Authorized Domains)";
+                    } else if (err.code === 'auth/popup-closed-by-user') {
+                        msg = "การเชื่อมต่อถูกยกเลิกโดยผู้ใช้";
+                    }
+                    setError(msg);
                     setLoading(false);
                 }
             };
@@ -176,7 +182,7 @@
                     }
                 } catch (err) {
                     let msg = err.message;
-                    if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') msg = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+                    if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') msg = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
                     if (err.code === 'auth/email-already-in-use') msg = "อีเมลนี้ถูกใช้งานแล้ว";
                     if (err.code === 'auth/weak-password') msg = "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร";
                     if (msg === "รหัสผ่านไม่ตรงกัน") msg = "รหัสผ่านไม่ตรงกัน";
@@ -223,7 +229,7 @@
                         </div>
 
                         {error && (
-                            <div className="p-3 rounded-xl bg-red-100 border border-red-200 text-red-600 text-sm text-center animate-fadeIn">
+                            <div className="p-3 rounded-xl bg-red-100 border border-red-200 text-red-600 text-sm text-center animate-fadeIn break-words">
                                 {error}
                             </div>
                         )}
@@ -858,7 +864,7 @@
                                     />
                                 </div>
 
-                                {/* List */}
+                                {/* List - Adjusted spacing and rounded corners */}
                                 <div className="flex-1 space-y-6 p-6 overflow-y-auto no-scrollbar">
                                     {filteredHistory.length === 0 ? (
                                         <div className="text-center py-10 text-gray-400">
@@ -869,9 +875,10 @@
                                             <div 
                                                 key={item.id} 
                                                 onClick={() => handleRestore(item)}
-                                                className={`p-5 rounded-2xl bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)] border border-[#E0E5EC] hover:translate-y-[-2px] transition-all cursor-pointer group`}
+                                                className={`p-5 rounded-2xl bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)] hover:translate-y-[-2px] transition-all cursor-pointer group`}
                                             >
                                                 <div className="flex justify-between items-start mb-2">
+                                                    {/* Edited Date Style */}
                                                     <span className="text-xs italic text-gray-500">
                                                         แก้ไขล่าสุด : {item.timestamp}
                                                     </span>
