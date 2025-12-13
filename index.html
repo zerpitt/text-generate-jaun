@@ -30,17 +30,16 @@
         body {
             font-family: 'Sarabun', sans-serif;
             background-color: #E0E5EC;
+            overflow: hidden; 
         }
-        /* Custom Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fadeIn {
             animation: fadeIn 0.3s ease-out forwards;
         }
         
-        /* Bouncy Animation */
         @keyframes bounceIn {
             0% { transform: scale(0.3); opacity: 0; }
             50% { transform: scale(1.05); opacity: 1; }
@@ -48,25 +47,15 @@
             100% { transform: scale(1); }
         }
         .animate-bounceIn {
-            animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation: bounceIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
 
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .animate-slideInRight {
-            animation: slideInRight 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
         .no-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
-        }
-        html {
-            scroll-behavior: smooth;
         }
     </style>
 </head>
@@ -97,7 +86,6 @@
         const Icon = ({ children, size = 24, className = "" }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
         );
-        const ClipboardListIcon = (props) => (<Icon {...props}><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></Icon>);
         const StoreIcon = (props) => (<Icon {...props}><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path><path d="M2 7h20"></path><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"></path></Icon>);
         const FileTextIcon = (props) => (<Icon {...props}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></Icon>);
         const UserIcon = (props) => (<Icon {...props}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></Icon>);
@@ -122,68 +110,32 @@
         const CheckCircleIcon = (props) => (<Icon {...props}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></Icon>);
         const ArrowUpIcon = (props) => (<Icon {...props}><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></Icon>);
         const UsersIcon = (props) => (<Icon {...props}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></Icon>);
-        const UserSettingsIcon = (props) => (<Icon {...props}><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></Icon>);
+        const UserSettingsIcon = (props) => (<Icon {...props}><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></Icon>);
         const LayoutListIcon = (props) => (<Icon {...props}><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></Icon>);
         const LayoutGridIcon = (props) => (<Icon {...props}><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></Icon>);
         const LayoutCompactIcon = (props) => (<Icon {...props}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></Icon>);
         const CameraIcon = (props) => (<Icon {...props}><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></Icon>);
+        const SaveIconFilled = (props) => (<Icon {...props}><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" fill="currentColor"></path><polyline points="17 21 17 13 7 13 7 21" stroke="#E0E5EC"></polyline><polyline points="7 3 7 8 15 8" stroke="#E0E5EC"></polyline></Icon>);
+        const GearIcon = (props) => (<Icon {...props}><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></Icon>);
+        const HomeIcon = (props) => (<Icon {...props}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></Icon>);
+        const ClipboardIcon = (props) => (<Icon {...props}><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></Icon>);
+        const ChevronDownIcon = (props) => (<Icon {...props}><polyline points="6 9 12 15 18 9"></polyline></Icon>);
+        const ChevronUpIcon = (props) => (<Icon {...props}><polyline points="18 15 12 9 6 15"></polyline></Icon>);
 
         // --- Toast Component ---
         const Toast = ({ message, type, show }) => {
             if (!show) return null;
-
-            let bgColor = 'bg-gray-800';
-            let icon = <CheckCircleIcon size={20} />;
-            
-            if (type === 'success') {
-                bgColor = 'bg-emerald-500';
-                icon = <CheckCircleIcon size={20} />;
-            } else if (type === 'error') {
-                bgColor = 'bg-red-500';
-                icon = <AlertOctagonIcon size={20} />;
-            } else if (type === 'warning') {
-                bgColor = 'bg-amber-500';
-                icon = <AlertIcon size={20} />;
-            }
-
+            let bgColor = 'bg-gray-800'; let icon = <CheckCircleIcon size={20} />;
+            if (type === 'success') { bgColor = 'bg-emerald-500'; icon = <CheckCircleIcon size={20} />; }
+            else if (type === 'error') { bgColor = 'bg-red-500'; icon = <AlertOctagonIcon size={20} />; }
+            else if (type === 'warning') { bgColor = 'bg-amber-500'; icon = <AlertIcon size={20} />; }
             return (
                 <div className="fixed top-5 right-5 z-50 animate-slideInRight">
-                    <div className={`${bgColor} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3`}>
-                        {icon}
-                        <span className="font-medium">{message}</span>
-                    </div>
+                    <div className={`${bgColor} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3`}>{icon}<span className="font-medium">{message}</span></div>
                 </div>
             );
         };
 
-        // --- Donut Chart ---
-        const DonutChart = ({ data }) => {
-            const total = data.reduce((acc, item) => acc + item.value, 0);
-            let cumulativePercent = 0;
-            const getCoordinatesForPercent = (percent) => {
-                const x = Math.cos(2 * Math.PI * percent);
-                const y = Math.sin(2 * Math.PI * percent);
-                return [x, y];
-            };
-            const slices = data.map((item, index) => {
-                const startPercent = cumulativePercent;
-                const endPercent = cumulativePercent + (item.value / total);
-                cumulativePercent = endPercent;
-                const [startX, startY] = getCoordinatesForPercent(startPercent);
-                const [endX, endY] = getCoordinatesForPercent(endPercent);
-                const largeArcFlag = item.value / total > 0.5 ? 1 : 0;
-                const pathData = [`M ${startX} ${startY}`, `A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`, `L 0 0`].join(" ");
-                return <path key={index} d={pathData} fill={item.color} />;
-            });
-            return (
-                <div className="w-48 h-48 relative">
-                    <svg viewBox="-1 -1 2 2" className="transform -rotate-90 w-full h-full">{total === 0 ? <circle cx="0" cy="0" r="1" fill="#E5E7EB" /> : slices}<circle cx="0" cy="0" r="0.6" fill="#E0E5EC" /></svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-blue-900 pointer-events-none"><span className="text-3xl font-bold">{total}</span><span className="text-xs text-gray-500">เคสวันนี้</span></div>
-                </div>
-            );
-        };
-
-        // --- Utils ---
         const getCurrentDateTime = () => {
             const now = new Date();
             const date = now.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -199,28 +151,16 @@
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
-                        const size = 300; // Target size for avatar
-                        canvas.width = size;
-                        canvas.height = size;
-
-                        // Calculate center crop
+                        const size = 300; canvas.width = size; canvas.height = size;
                         const minScale = Math.max(size / img.width, size / img.height);
-                        const width = img.width * minScale;
-                        const height = img.height * minScale;
-                        const x = (size - width) / 2;
-                        const y = (size - height) / 2;
-
-                        // Draw image center cropped
+                        const width = img.width * minScale; const height = img.height * minScale;
+                        const x = (size - width) / 2; const y = (size - height) / 2;
                         ctx.drawImage(img, x, y, width, height);
-                        
-                        // Convert to WebP
                         resolve(canvas.toDataURL('image/webp', 0.8));
                     };
-                    img.onerror = reject;
-                    img.src = e.target.result;
+                    img.onerror = reject; img.src = e.target.result;
                 };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
+                reader.onerror = reject; reader.readAsDataURL(file);
             });
         };
 
@@ -228,6 +168,7 @@
 
         // --- Auth Component ---
         const AuthPage = ({ onLoginSuccess }) => {
+            // ... (Keep existing AuthPage as is) ...
             const [isLoginMode, setIsLoginMode] = useState(true);
             const [email, setEmail] = useState('');
             const [password, setPassword] = useState('');
@@ -299,8 +240,8 @@
             const [currentView, setCurrentView] = useState('form'); 
             const [isClearingHistory, setIsClearingHistory] = useState(false);
             const [isLoggingOut, setIsLoggingOut] = useState(false);
-            const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
-            const [layoutMode, setLayoutMode] = useState('grid'); // Default: Grid
+            const [layoutMode, setLayoutMode] = useState('grid');
+            const [isSettingsOpen, setIsSettingsOpen] = useState(false);
             
             // Data
             const [storeName, setStoreName] = useState('');
@@ -315,14 +256,22 @@
             const [searchQuery, setSearchQuery] = useState('');
             const [teamCode, setTeamCode] = useState(null);
             const [inputTeamCode, setInputTeamCode] = useState('');
+            const [teamMembers, setTeamMembers] = useState([]);
             
             // Profile Edit States
             const [editDisplayName, setEditDisplayName] = useState('');
-            const [editPhotoBase64, setEditPhotoBase64] = useState(null); // Stores base64
+            const [editPhotoBase64, setEditPhotoBase64] = useState(null); 
             const [newPassword, setNewPassword] = useState('');
-            
+            const [originalProfile, setOriginalProfile] = useState({});
+            const [isDirty, setIsDirty] = useState(false);
+            const [isNavigatingAway, setIsNavigatingAway] = useState(false);
+            const [pendingView, setPendingView] = useState(null);
+            const [showScrollTop, setShowScrollTop] = useState(false);
+
             const fileInputRef = useRef(null);
-            const profileImageInputRef = useRef(null); // For profile image upload
+            const profileImageInputRef = useRef(null); 
+            const settingsRef = useRef(null); 
+            const mainContainerRef = useRef(null); 
 
             const initialItems = [
                 { id: 1, label: 'ข้อมูลลูกค้า ยื่นเข้าในระบบ' }, { id: 2, label: 'อาชีพ' }, { id: 3, label: 'เฟสบุ๊ค' }, { id: 4, label: 'เบอร์สำรอง' },
@@ -338,19 +287,61 @@
                 const unsubscribe = auth.onAuthStateChanged((user) => {
                     setUser(user);
                     if (user) {
-                        setEditDisplayName(user.displayName || '');
-                        // Check if we have a base64 photo stored in Firestore for this user
+                        const name = user.displayName || '';
+                        setEditDisplayName(name);
                         db.collection('users').doc(user.uid).get().then(doc => {
+                            let photo = user.photoURL || null;
                             if (doc.exists && doc.data().photoBase64) {
-                                setEditPhotoBase64(doc.data().photoBase64);
-                            } else {
-                                setEditPhotoBase64(user.photoURL || null);
+                                photo = doc.data().photoBase64;
                             }
+                            setEditPhotoBase64(photo);
+                            setOriginalProfile({ displayName: name, photoBase64: photo });
                         });
                     }
                     setAuthLoading(false);
                 });
                 return () => unsubscribe();
+            }, []);
+
+            // Check if profile is dirty - fix logic
+            useEffect(() => {
+                const currentName = editDisplayName || '';
+                const origName = originalProfile.displayName || '';
+                const currentPhoto = editPhotoBase64 || '';
+                const origPhoto = originalProfile.photoBase64 || '';
+                
+                const isNameChanged = currentName !== origName;
+                const isPhotoChanged = currentPhoto !== origPhoto;
+                const isPassChanged = newPassword !== '';
+                
+                setIsDirty(isNameChanged || isPhotoChanged || isPassChanged);
+            }, [editDisplayName, editPhotoBase64, newPassword, originalProfile]);
+
+            // Scroll Listener
+            useEffect(() => {
+                const container = mainContainerRef.current;
+                if (!container) return;
+
+                const handleScroll = () => {
+                    if (container.scrollTop > 300) {
+                        setShowScrollTop(true);
+                    } else {
+                        setShowScrollTop(false);
+                    }
+                };
+                container.addEventListener('scroll', handleScroll);
+                return () => container.removeEventListener('scroll', handleScroll);
+            }, [user, currentView]);
+
+            // Click outside to close settings
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (settingsRef.current && !settingsRef.current.contains(event.target)) {
+                        setIsSettingsOpen(false);
+                    }
+                };
+                document.addEventListener('mousedown', handleClickOutside);
+                return () => document.removeEventListener('mousedown', handleClickOutside);
             }, []);
 
             useEffect(() => {
@@ -359,7 +350,6 @@
                     if (doc.exists) {
                         const data = doc.data();
                         setTeamCode(data.currentTeam || null);
-                        if(data.photoBase64) setEditPhotoBase64(data.photoBase64); // Live update profile pic
                     }
                 });
                 return () => unsubscribe();
@@ -371,8 +361,13 @@
                 let collectionRef;
                 if (teamCode) {
                     collectionRef = db.collection('teams').doc(teamCode).collection('history');
+                    const membersUnsub = db.collection('teams').doc(teamCode).collection('members').onSnapshot(snapshot => {
+                        const members = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        setTeamMembers(members);
+                    });
                 } else {
                     collectionRef = db.collection('users').doc(user.uid).collection('history');
+                    setTeamMembers([]);
                 }
 
                 const unsubscribe = collectionRef.orderBy('timestamp_raw', 'desc').onSnapshot((snapshot) => {
@@ -383,6 +378,7 @@
                 return () => unsubscribe();
             }, [user, teamCode]);
 
+            // Form Logic
             useEffect(() => {
                 const getStatusText = (status) => {
                     switch (status) { case 'passed': return '✅ผ่าน'; case 'pending': return '⭕รอเอกสาร'; case 'edit': return '💢แก้ไข'; default: return ''; }
@@ -429,6 +425,31 @@
             // --- Handlers ---
             const showToast = (message, type = 'success') => { setToast({ show: true, message, type }); setTimeout(() => setToast(prev => ({ ...prev, show: false })), 1000); };
             
+            const handleNavigation = (targetView) => {
+                if (currentView === 'profile' && isDirty) {
+                    setPendingView(targetView);
+                    setIsNavigatingAway(true);
+                } else {
+                    setCurrentView(targetView);
+                    setIsClearingHistory(false);
+                    setIsSettingsOpen(false);
+                }
+            };
+
+            const confirmNavigation = () => {
+                setEditDisplayName(originalProfile.displayName);
+                setEditPhotoBase64(originalProfile.photoBase64);
+                setNewPassword('');
+                setIsDirty(false);
+                setIsNavigatingAway(false);
+                setCurrentView(pendingView);
+            };
+
+            const cancelNavigation = () => {
+                setIsNavigatingAway(false);
+                setPendingView(null);
+            };
+
             const handleStatusChange = (id, newStatus) => {
                 const newChecklist = checklist.map((item) => item.id === id ? { ...item, status: newStatus } : item);
                 setChecklist(newChecklist);
@@ -475,27 +496,33 @@
                 } else { resetForm(); showToast('ล้างฟอร์มเรียบร้อย', 'warning'); }
             };
 
-            // Team Handlers
             const handleJoinTeam = async (code) => {
                 if(!code.trim()) return showToast('กรุณาระบุรหัสทีม', 'error');
                 try {
                     await db.collection('users').doc(user.uid).set({ currentTeam: code }, { merge: true });
+                    await db.collection('teams').doc(code).collection('members').doc(user.uid).set({
+                        displayName: user.displayName || 'User',
+                        photoBase64: editPhotoBase64 || null,
+                        joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
                     setTeamCode(code);
-                    setIsTeamModalOpen(false); // Close Modal
+                    handleNavigation('team'); // Navigate instead of closing modal
                     showToast(`เข้าร่วมทีม ${code} แล้ว`, 'success');
-                } catch(e) { showToast('เกิดข้อผิดพลาด', 'error'); }
+                } catch(e) { console.error(e); showToast('เกิดข้อผิดพลาด', 'error'); }
             };
 
             const handleLeaveTeam = async () => {
                 try {
+                    if (teamCode) {
+                        await db.collection('teams').doc(teamCode).collection('members').doc(user.uid).delete();
+                    }
                     await db.collection('users').doc(user.uid).update({ currentTeam: firebase.firestore.FieldValue.delete() });
                     setTeamCode(null);
-                    setIsTeamModalOpen(false); // Close Modal
+                    handleNavigation('team'); // Navigate to refresh state view
                     showToast('ออกจากทีมแล้ว กลับสู่โหมดส่วนตัว', 'success');
                 } catch(e) { showToast('เกิดข้อผิดพลาด', 'error'); }
             };
 
-            // Profile Handlers
             const handleProfileImageChange = (e) => {
                 const file = e.target.files[0];
                 if (file) {
@@ -508,47 +535,41 @@
             const handleUpdateProfile = async (e) => {
                 e.preventDefault();
                 try {
-                    // Update Auth Profile
                     await user.updateProfile({ displayName: editDisplayName });
-                    
-                    // Update Firestore Profile (including Image Base64)
-                    await db.collection('users').doc(user.uid).set({
-                        photoBase64: editPhotoBase64 // Save the processed image
-                    }, { merge: true });
-
+                    await db.collection('users').doc(user.uid).set({ photoBase64: editPhotoBase64 }, { merge: true });
+                    if (teamCode) {
+                        await db.collection('teams').doc(teamCode).collection('members').doc(user.uid).set({ displayName: editDisplayName, photoBase64: editPhotoBase64 }, { merge: true });
+                    }
                     if (newPassword) await user.updatePassword(newPassword);
                     setNewPassword('');
-                    showToast('อัปเดตโปรไฟล์เรียบร้อย', 'success');
-                } catch (error) {
-                    showToast(error.message, 'error');
-                }
+                    setOriginalProfile({ displayName: editDisplayName, photoBase64: editPhotoBase64 });
+                    setIsDirty(false);
+                    showToast('บันทึกเรียบร้อย', 'success');
+                } catch (error) { showToast(error.message, 'error'); }
             };
 
             const handleRestore = (item) => {
                 setStoreName(item.storeName || ''); setInvNumber(item.invNumber || ''); setCustomerName(item.customerName || '');
                 if (item.checklist) setChecklist(item.checklist);
-                setCurrentId(item.id); setCurrentView('form'); setShowRestoredHighlight(true); 
+                setCurrentId(item.id); 
+                handleNavigation('form'); 
+                setShowRestoredHighlight(true); 
             };
-            const handleLogout = () => { auth.signOut(); setIsLoggingOut(false); };
-            const scrollToTop = () => { window.scrollTo({ top: 0, behavior: 'smooth' }); };
+            const handleLogout = () => { auth.signOut(); setIsLoggingOut(false); setIsSettingsOpen(false); };
+            
+            const scrollToTop = () => { 
+                if(mainContainerRef.current) {
+                    mainContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
 
             const handleExportCSV = () => {
                 if (history.length === 0) return showToast("ไม่มีข้อมูลให้ Export", 'warning');
-                
                 const headers = ["Date", "StoreName", "INV", "Customer", "ChecklistData", "LastEditedBy"];
-                
                 const rows = history.map(item => {
                     const safe = (str) => `"${(str || '').replace(/"/g, '""')}"`;
-                    return [
-                        safe(item.timestamp),
-                        safe(item.storeName),
-                        safe(item.invNumber),
-                        safe(item.customerName),
-                        safe(JSON.stringify(item.checklist)),
-                        safe(item.lastEditedBy)
-                    ].join(",");
+                    return [safe(item.timestamp), safe(item.storeName), safe(item.invNumber), safe(item.customerName), safe(JSON.stringify(item.checklist)), safe(item.lastEditedBy)].join(",");
                 });
-
                 const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\n");
                 const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
                 const url = URL.createObjectURL(blob);
@@ -564,78 +585,54 @@
             const handleImportCSV = (event) => {
                 const file = event.target.files[0];
                 if (!file) return;
-
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     const text = e.target.result;
                     const lines = text.split("\n");
                     const dataRows = lines.slice(1); 
-
                     let successCount = 0;
-                    
                     let collectionRef;
-                    if (teamCode) {
-                        collectionRef = db.collection('teams').doc(teamCode).collection('history');
-                    } else {
-                        collectionRef = db.collection('users').doc(user.uid).collection('history');
-                    }
-
+                    if (teamCode) { collectionRef = db.collection('teams').doc(teamCode).collection('history'); } else { collectionRef = db.collection('users').doc(user.uid).collection('history'); }
                     for (let line of dataRows) {
                         if (!line.trim()) continue;
-                        
-                        const row = [];
-                        let inQuote = false;
-                        let currentVal = '';
-                        for(let i=0; i<line.length; i++){
-                            const char = line[i];
-                            if(char === '"'){
-                                if(inQuote && line[i+1] === '"'){
-                                    currentVal += '"';
-                                    i++;
-                                } else {
-                                    inQuote = !inQuote;
-                                }
-                            } else if(char === ',' && !inQuote){
-                                row.push(currentVal);
-                                currentVal = '';
-                            } else {
-                                currentVal += char;
-                            }
-                        }
+                        const row = []; let inQuote = false; let currentVal = '';
+                        for(let i=0; i<line.length; i++){ const char = line[i]; if(char === '"'){ if(inQuote && line[i+1] === '"'){ currentVal += '"'; i++; } else { inQuote = !inQuote; } } else if(char === ',' && !inQuote){ row.push(currentVal); currentVal = ''; } else { currentVal += char; } }
                         row.push(currentVal);
-                        
                         if (row.length >= 5) {
                             try {
                                 const checklist = JSON.parse(row[4]);
-                                const newItem = {
-                                    timestamp: row[0] || getCurrentDateTime(),
-                                    timestamp_raw: firebase.firestore.FieldValue.serverTimestamp(),
-                                    storeName: row[1],
-                                    invNumber: row[2],
-                                    customerName: row[3],
-                                    checklist: checklist,
-                                    lastEditedBy: row[5] || user.displayName || user.email || 'Imported'
-                                };
+                                const newItem = { timestamp: row[0] || getCurrentDateTime(), timestamp_raw: firebase.firestore.FieldValue.serverTimestamp(), storeName: row[1], invNumber: row[2], customerName: row[3], checklist: checklist, lastEditedBy: row[5] || user.displayName || user.email || 'Imported' };
                                 await collectionRef.add(newItem);
                                 successCount++;
-                            } catch (err) {
-                                console.error("Skipping row", err);
-                            }
+                            } catch (err) {}
                         }
                     }
-                    
-                    if (successCount > 0) showToast(`นำเข้าสำเร็จ ${successCount} รายการ`, 'success');
-                    else showToast(`ไม่พบข้อมูลที่นำเข้าได้`, 'warning');
+                    if (successCount > 0) showToast(`นำเข้าสำเร็จ ${successCount} รายการ`, 'success'); else showToast(`ไม่พบข้อมูลที่นำเข้าได้`, 'warning');
                 };
                 reader.readAsText(file);
                 event.target.value = ''; 
             };
             const triggerImport = () => { if (fileInputRef.current) fileInputRef.current.click(); };
-            const handleClearHistory = async () => { /* ...existing clear history logic... */ };
+            const handleClearHistory = async () => {
+                if (!user) return;
+                setIsClearingHistory(false);
+                let collectionRef;
+                if (teamCode) collectionRef = db.collection('teams').doc(teamCode).collection('history');
+                else collectionRef = db.collection('users').doc(user.uid).collection('history');
+                try {
+                    const snapshot = await collectionRef.get();
+                    const batch = db.batch();
+                    snapshot.docs.forEach((doc) => batch.delete(doc.ref));
+                    await batch.commit();
+                    showToast('ล้างประวัติทั้งหมดแล้ว', 'success');
+                } catch (error) { showToast('เกิดข้อผิดพลาด', 'error'); }
+            };
 
             // Styles
             const styles = {
-                bg: 'bg-[#E0E5EC]', text: 'text-gray-800', neuFlat: `bg-[#E0E5EC] shadow-[9px_9px_16px_rgb(163,177,198,0.6),-9px_-9px_16px_rgba(255,255,255,0.5)] rounded-2xl`,
+                bg: 'bg-[#E0E5EC]', text: 'text-gray-800', 
+                // Revised neuFlat: Clean and Soft Neumorphism (Reverted to standard soft shadow, added padding to container to prevent clipping)
+                neuFlat: `bg-[#E0E5EC] shadow-[6px_6px_12px_rgb(163,177,198,0.5),-6px_-6px_12px_rgba(255,255,255,0.8)] rounded-2xl`,
                 neuPressed: `bg-[#E0E5EC] shadow-[inset_6px_6px_10px_rgb(163,177,198,0.6),inset_-6px_-6px_10px_rgba(255,255,255,0.8)] rounded-xl`,
                 btn: `transition-all duration-200 ease-in-out active:scale-95 flex items-center justify-center font-medium cursor-pointer`,
                 statusBtn: (active, colorClass) => `h-8 px-3 text-xs rounded-lg cursor-pointer transition-all duration-200 flex items-center justify-center active:scale-95 ${active ? 'font-bold text-white ' + colorClass + ' shadow-[inset_3px_3px_6px_rgba(0,0,0,0.2),inset_-2px_-2px_5px_rgba(255,255,255,0.3)]' : 'text-gray-500 bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.5),-5px_-5px_10px_rgba(255,255,255,0.6)] hover:translate-y-[-1px]'}`,
@@ -646,243 +643,332 @@
             if (!user) return <AuthPage />;
 
             return (
-                <div className={`min-h-screen ${styles.bg} ${styles.text} p-4 md:p-8 flex justify-center items-start pb-20`}>
+                <div className={`min-h-screen ${styles.bg} ${styles.text} flex justify-center items-start`}>
                     <Toast message={toast.message} type={toast.type} show={toast.show} />
-                    <button onClick={scrollToTop} className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)] text-blue-900 hover:text-blue-700 active:scale-95 transition-all" title="เลื่อนขึ้นบนสุด"><ArrowUpIcon size={24} /></button>
 
-                    <div className={`w-full max-w-3xl ${styles.neuFlat} p-6 md:p-8 space-y-6 relative overflow-hidden transition-all duration-300`}>
-                        {/* Header */}
-                        <div className="flex items-center justify-between mb-2">
+                    {/* Scroll To Top Button */}
+                    {showScrollTop && (
+                        <button 
+                            onClick={scrollToTop}
+                            className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-[#E0E5EC] shadow-[5px_5px_10px_rgb(163,177,198,0.6),-5px_-5px_10px_rgba(255,255,255,0.8)] text-blue-900 hover:text-blue-700 active:scale-95 transition-all animate-bounceIn"
+                            title="เลื่อนขึ้นบนสุด"
+                        >
+                            <ArrowUpIcon size={24} />
+                        </button>
+                    )}
+
+                    {/* Main Scrollable Container */}
+                    <div ref={mainContainerRef} className="w-full md:h-screen md:overflow-y-auto p-4 md:p-8 relative transition-all duration-300">
+                        
+                        {/* Header Area */}
+                        <div className="w-full max-w-3xl mx-auto flex items-center justify-between mb-6">
                              <div className="flex items-center gap-3">
-                                <div className={`p-3 rounded-full ${styles.neuFlat} text-blue-900`}><ClipboardListIcon size={28} /></div>
-                                <div><h1 className="text-xl md:text-2xl font-bold text-blue-900 tracking-wide hidden sm:block">โปรแกรมสร้างข้อความอัตโนมัติ</h1>
-                                    <div className="flex items-center gap-2">
-                                        <div className="text-xs text-gray-500 font-medium sm:hidden block">{user.displayName || user.email}</div>
-                                        {teamCode && <span className="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full border border-blue-200 font-bold">Team: {teamCode}</span>}
+                                {/* Navigation (Top Left) */}
+                                <div className="flex gap-2 mr-2">
+                                    <button 
+                                        onClick={() => handleNavigation('form')}
+                                        className={`${styles.btn} p-2 rounded-xl ${currentView === 'form' ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`}
+                                        title="หน้าแรก"
+                                    >
+                                        <HomeIcon size={20} />
+                                    </button>
+                                    <button 
+                                        onClick={() => handleNavigation('history')}
+                                        className={`${styles.btn} p-2 rounded-xl relative ${currentView === 'history' ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`}
+                                        title="ประวัติ"
+                                    >
+                                        <HistoryIcon size={20} />
+                                        {history.length > 0 && (<span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#E0E5EC]"></span>)}
+                                    </button>
+                                </div>
+                                <h1 className="text-xl md:text-2xl font-bold text-blue-900 tracking-wide hidden sm:block truncate">โปรแกรมสร้างข้อความอัตโนมัติ</h1>
+                             </div>
+                             
+                             <div className="flex items-center gap-4 relative" ref={settingsRef}>
+                                {/* Profile Info */}
+                                <div className="flex items-center gap-3 text-right">
+                                    <div className="hidden sm:block">
+                                        <div className="text-sm font-bold text-blue-900 truncate max-w-[120px]">{user.displayName || 'ผู้ใช้งาน'}</div>
+                                        <div className="text-xs text-gray-500">{teamCode ? `Team: ${teamCode}` : 'ส่วนตัว'}</div>
+                                    </div>
+                                    <div className={`w-10 h-10 rounded-full overflow-hidden border-2 ${teamCode ? 'border-emerald-400' : 'border-blue-200'} shadow-sm flex-shrink-0`}>
+                                        {editPhotoBase64 ? <img src={editPhotoBase64} alt="Avatar" className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400"><UserIcon size={20} /></div>}
                                     </div>
                                 </div>
-                             </div>
-                             <div className="flex items-center gap-2 md:gap-4">
-                                <div className="hidden sm:flex flex-col items-end mr-2">
-                                    <span className="text-sm font-bold text-blue-900">{user.displayName || 'ผู้ใช้งาน'}</span>
-                                    {teamCode ? <span className="text-xs text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-100">Team: {teamCode}</span> : <span className="text-xs text-gray-500">ส่วนตัว</span>}
-                                </div>
-                                <button onClick={() => { setIsTeamModalOpen(prev => !prev); }} className={`${styles.btn} p-3 rounded-full ${isTeamModalOpen ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`} title="จัดการทีม"><UsersIcon size={20} /></button>
-                                <button onClick={() => setCurrentView('profile')} className={`${styles.btn} p-3 rounded-full ${currentView === 'profile' ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`} title="จัดการโปรไฟล์"><UserSettingsIcon size={20} /></button>
-                                <button onClick={() => { setCurrentView('form'); setIsClearingHistory(false); }} className={`${styles.btn} p-3 rounded-full ${currentView === 'form' ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`} title="หน้าแรก"><Edit3Icon size={20} /></button>
-                                <button onClick={() => setCurrentView('history')} className={`${styles.btn} p-3 rounded-full relative ${currentView === 'history' ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`} title="ประวัติ"><HistoryIcon size={20} />{history.length > 0 && (<span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-[#E0E5EC]"></span>)}</button>
-                                <button onClick={() => setIsLoggingOut(prev => !prev)} className={`${styles.btn} p-3 rounded-full text-red-500 hover:text-red-700 ${styles.neuFlat}`} title="ออกจากระบบ"><LogoutIcon size={20} /></button>
+
+                                {/* Settings Button */}
+                                <button 
+                                    onClick={() => setIsSettingsOpen(prev => !prev)} 
+                                    className={`${styles.btn} w-10 h-10 rounded-full ${isSettingsOpen ? 'text-blue-600 ' + styles.neuPressed : 'text-gray-500 ' + styles.neuFlat}`}
+                                >
+                                    <GearIcon size={20} />
+                                </button>
+
+                                {/* Settings Dropdown Menu */}
+                                {isSettingsOpen && (
+                                    <div className="absolute top-14 right-0 w-56 bg-[#E0E5EC] rounded-2xl shadow-[9px_9px_16px_rgb(163,177,198,0.6),-9px_-9px_16px_rgba(255,255,255,0.5)] z-50 overflow-hidden border border-white/50 animate-bounceIn origin-top-right p-2">
+                                        <div className="flex flex-col gap-1">
+                                            <button onClick={() => handleNavigation('profile')} className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-blue-900 transition-colors text-sm font-medium text-left">
+                                                <UserSettingsIcon size={18} /> จัดการโปรไฟล์
+                                            </button>
+                                            <button onClick={() => handleNavigation('team')} className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-blue-900 transition-colors text-sm font-medium text-left">
+                                                <UsersIcon size={18} /> จัดการทีม
+                                            </button>
+                                            <div className="h-px bg-gray-300/50 my-1 mx-2"></div>
+                                            <button onClick={() => setIsLoggingOut(true)} className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 text-red-600 transition-colors text-sm font-medium text-left">
+                                                <LogoutIcon size={18} /> ออกจากระบบ
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                              </div>
                         </div>
 
-                        {/* Team Modal */}
-                        {isTeamModalOpen && (
-                            <div className="mb-6 p-6 rounded-xl bg-blue-50 border border-blue-100 animate-bounceIn relative">
-                                <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2"><UsersIcon size={20}/> จัดการทีม (Team Collaboration)</h3>
-                                <p className="text-sm text-blue-800 mb-4">เข้าร่วมทีมเพื่อดูและจัดการข้อมูลร่วมกันกับเพื่อนร่วมงาน</p>
-                                
-                                {teamCode ? (
-                                    <div className="text-center space-y-4">
-                                        <div className="text-lg font-bold text-blue-900">คุณกำลังอยู่ในทีม: <span className="text-emerald-600 text-2xl block mt-1">{teamCode}</span></div>
-                                        <button onClick={handleLeaveTeam} className="w-full py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-colors">ออกจากทีม (กลับสู่โหมดส่วนตัว)</button>
-                                    </div>
-                                ) : (
-                                    <div className="space-y-3">
-                                        <input 
-                                            type="text" 
-                                            placeholder="กรอกรหัสร้าน / รหัสทีม (เช่น SHOP-A)" 
-                                            value={inputTeamCode}
-                                            onChange={(e) => setInputTeamCode(e.target.value.toUpperCase())}
-                                            className={`w-full px-4 py-2 text-center text-lg font-bold tracking-widest ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200`}
-                                        />
-                                        <button onClick={() => handleJoinTeam(inputTeamCode.toUpperCase())} className="w-full py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors">เข้าร่วมทีม</button>
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                        {/* Content Area - Max width constraint matches header */}
+                        <div className="w-full max-w-3xl mx-auto pb-20">
 
-                        {/* Logout Confirmation Modal */}
-                        {isLoggingOut && (
-                            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 animate-bounceIn">
-                                <div className="flex items-start gap-3"><div className="text-red-500 mt-1"><AlertIcon size={24}/></div><div className="flex-1"><h3 className="font-bold text-red-800 mb-1">ยืนยันการออกจากระบบ?</h3><p className="text-sm text-red-600 mb-3">คุณต้องการออกจากระบบใช่หรือไม่</p><div className="flex gap-3"><button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white text-sm rounded-lg shadow-md hover:bg-red-600 transition-colors">ใช่ ออกจากระบบ</button><button onClick={() => setIsLoggingOut(false)} className="px-4 py-2 bg-white text-gray-600 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">ยกเลิก</button></div></div></div>
-                            </div>
-                        )}
-
-                        {/* VIEW: PROFILE MANAGEMENT (NEW PAGE) */}
-                        {currentView === 'profile' && (
-                            <div className="animate-fadeIn h-full flex flex-col space-y-6">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <button onClick={() => setCurrentView('form')} className="p-2 -ml-2 text-gray-500 hover:text-blue-900 transition-colors"><ArrowLeftIcon size={24} /></button>
-                                    <h2 className="text-lg font-semibold text-blue-900">จัดการโปรไฟล์</h2>
-                                </div>
-                                <div className={`p-8 rounded-2xl ${styles.neuFlat}`}>
-                                    <form onSubmit={handleUpdateProfile} className="space-y-6 max-w-md mx-auto">
-                                        <div className="flex flex-col items-center mb-4 space-y-3">
-                                            <div className={`w-32 h-32 rounded-full overflow-hidden ${styles.neuPressed} border-4 border-[#E0E5EC] flex items-center justify-center relative group`}>
-                                                {editPhotoBase64 ? <img src={editPhotoBase64} alt="Profile" className="w-full h-full object-cover" /> : <UserIcon size={48} className="text-gray-400" />}
-                                            </div>
-                                            
-                                            <input 
-                                                type="file" 
-                                                accept="image/*" 
-                                                ref={profileImageInputRef}
-                                                onChange={handleProfileImageChange}
-                                                className="hidden"
-                                            />
-                                            <button 
-                                                type="button"
-                                                onClick={() => profileImageInputRef.current.click()}
-                                                className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 bg-blue-50 px-3 py-1 rounded-full border border-blue-100"
-                                            >
-                                                <UploadIcon size={14} /> อัปโหลดรูปโปรไฟล์
-                                            </button>
-                                            <span className="text-[10px] text-gray-400">ระบบจะครอปวงกลมและย่อขนาดให้อัตโนมัติ</span>
+                            {/* Unsaved Changes Guard Modal */}
+                            {isNavigatingAway && (
+                                <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+                                    <div className={`p-6 rounded-2xl bg-[#E0E5EC] shadow-[9px_9px_16px_rgb(163,177,198,0.6),-9px_-9px_16px_rgba(255,255,255,0.5)] border border-red-100 max-w-sm w-full mx-4 animate-bounceIn text-center`}>
+                                        <div className="text-red-500 mb-3 flex justify-center"><AlertIcon size={40}/></div>
+                                        <h3 className="font-bold text-red-800 text-lg mb-2">ยกเลิกการแก้ไข?</h3>
+                                        <p className="text-sm text-gray-600 mb-6">คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก หากออกจากหน้านี้ข้อมูลจะสูญหาย</p>
+                                        <div className="flex gap-3 justify-center">
+                                            <button onClick={confirmNavigation} className="px-6 py-2 bg-red-500 text-white font-bold rounded-xl shadow-md hover:bg-red-600 transition-colors">ทิ้งข้อมูล</button>
+                                            <button onClick={cancelNavigation} className="px-6 py-2 bg-white text-gray-600 font-bold rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">กลับไปแก้ไข</button>
                                         </div>
-                                        
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-gray-600 ml-1">ชื่อผู้ใช้งาน</label>
-                                            <div className="relative">
-                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div>
-                                                <input type="text" value={editDisplayName} onChange={(e) => setEditDisplayName(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200 rounded-xl`} placeholder="ชื่อที่ใช้แสดง" />
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-2">
-                                            <label className="text-sm font-bold text-gray-600 ml-1">เปลี่ยนรหัสผ่าน (เว้นว่างหากไม่เปลี่ยน)</label>
-                                            <div className="relative">
-                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><LockIcon size={18} /></div>
-                                                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200 rounded-xl`} placeholder="รหัสผ่านใหม่" />
-                                            </div>
-                                        </div>
-
-                                        <button type="submit" className={`w-full py-3 rounded-xl text-blue-900 font-bold ${styles.neuFlat} hover:translate-y-[-2px] active:translate-y-[0px]`}>บันทึกการเปลี่ยนแปลง</button>
-                                    </form>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* VIEW: FORM */}
-                        {currentView === 'form' && (
-                            <div className="animate-fadeIn space-y-8">
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center"><h2 className="text-lg font-semibold text-blue-900 ml-1">ข้อมูลทั่วไป</h2>{currentId && <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-lg border border-orange-200">กำลังแก้ไขข้อมูลเก่า</span>}</div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><StoreIcon size={18} /></div><input type="text" placeholder="ชื่อร้านค้า" value={storeName} onChange={(e) => setStoreName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !storeName.trim() ? styles.inputError : styles.neuPressed}`} /></div>
-                                        <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><FileTextIcon size={18} /></div><input type="text" placeholder="เลข INV" value={invNumber} onChange={(e) => setInvNumber(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !invNumber.trim() ? styles.inputError : styles.neuPressed}`} /></div>
-                                        <div className="relative md:col-span-2"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div><input type="text" placeholder="ชื่อลูกค้า" value={customerName} onChange={(e) => setCustomerName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !customerName.trim() ? styles.inputError : styles.neuPressed}`} /></div>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4 py-2">
-                                    <button onClick={handleSaveDraft} className={`${styles.btn} ${styles.neuFlat} py-3 gap-2 text-emerald-700 hover:text-emerald-900 active:text-emerald-800`}><SaveIcon size={20} /><span>จัดเก็บชั่วคราว</span></button>
-                                    <button onClick={handleResetOrDelete} className={`${styles.btn} ${styles.neuFlat} py-3 text-red-600 hover:text-red-800 active:text-red-700 gap-2`}>{currentId ? <><TrashIcon size={20} /><span>ลบรายการนี้</span></> : <><XIcon size={20} /><span>ผ่าน/ยกเลิก</span></>}</button>
+                            )}
+
+                            {/* Logout Confirmation Modal */}
+                            {isLoggingOut && (
+                                <div className="fixed inset-0 bg-gray-900/20 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+                                    <div className="p-6 rounded-2xl bg-[#E0E5EC] shadow-xl border border-red-100 max-w-sm w-full mx-4 animate-bounceIn">
+                                        <div className="flex items-start gap-3"><div className="text-red-500 mt-1"><AlertIcon size={24}/></div><div className="flex-1"><h3 className="font-bold text-red-800 mb-1">ยืนยันการออกจากระบบ?</h3><p className="text-sm text-red-600 mb-3">คุณต้องการออกจากระบบใช่หรือไม่</p><div className="flex gap-3"><button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white text-sm rounded-lg shadow-md hover:bg-red-600 transition-colors">ใช่ ออกจากระบบ</button><button onClick={() => setIsLoggingOut(false)} className="px-4 py-2 bg-white text-gray-600 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">ยกเลิก</button></div></div></div>
+                                    </div>
                                 </div>
-                                <hr className="border-gray-300/50" />
-                                <div className="space-y-2">
-                                    <div className="flex justify-between items-center text-xs font-semibold text-blue-900 px-1"><span>ความคืบหน้า</span><span className={percentage === 100 ? (color.includes('emerald') ? 'text-emerald-600' : 'text-orange-600') : ''}>{emoji} {Math.round(percentage)}%</span></div>
-                                    <div className={`w-full h-3 rounded-full ${styles.neuPressed} overflow-hidden`}><div className={`h-full rounded-full transition-all duration-500 ease-out ${color}`} style={{ width: `${percentage}%` }}></div></div>
-                                </div>
-                                <div className="space-y-6">
-                                    <h2 className="text-lg font-semibold text-blue-900 ml-1">รายการตรวจสอบเอกสาร</h2>
-                                    <div className="space-y-4">
-                                        {checklist.map((item) => (
-                                            <div key={item.id} className={`p-4 rounded-2xl bg-[#E0E5EC] shadow-[6px_6px_12px_rgb(163,177,198,0.5),-6px_-6px_12px_rgba(255,255,255,0.8)] transition-all`}>
-                                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                                                    <div className="flex-1 flex items-start"><span className="font-medium text-gray-700 text-sm md:text-base mr-2 min-w-[20px]">{item.id}.</span><span className="font-medium text-gray-700 text-sm md:text-base whitespace-pre-line">{item.label}</span></div>
-                                                    <div className="flex flex-wrap gap-2 shrink-0">
-                                                        <div onClick={() => handleStatusChange(item.id, 'passed')} className={styles.statusBtn(item.status === 'passed', 'bg-blue-900')}><span className="flex items-center gap-1"><CheckIcon size={14}/> ผ่าน</span></div>
-                                                        <div onClick={() => handleStatusChange(item.id, 'pending')} className={styles.statusBtn(item.status === 'pending', 'bg-gray-500')}><span className="flex items-center gap-1"><ClockIcon size={14}/> รอ</span></div>
-                                                        <div onClick={() => handleStatusChange(item.id, 'edit')} className={styles.statusBtn(item.status === 'edit', 'bg-orange-500')}><span className="flex items-center gap-1"><Edit3Icon size={14}/> แก้ไข</span></div>
+                            )}
+
+                            {/* VIEW: TEAM MANAGEMENT */}
+                            {currentView === 'team' && (
+                                <div className="animate-fadeIn space-y-6">
+                                    <h2 className="text-xl font-bold text-blue-900 mb-4 flex items-center gap-2"><UsersIcon/> จัดการทีม</h2>
+                                    <div className={`p-8 rounded-2xl ${styles.neuFlat}`}>
+                                        {teamCode ? (
+                                            <div className="space-y-8">
+                                                <div className="text-center">
+                                                    <div className="text-gray-500 text-sm mb-1">รหัสทีมของคุณ</div>
+                                                    <div className={`text-4xl font-black text-blue-900 tracking-widest py-6 ${styles.neuPressed} rounded-2xl bg-blue-50/50 select-all`}>{teamCode}</div>
+                                                </div>
+                                                
+                                                <div className="space-y-4">
+                                                    <h3 className="font-bold text-gray-700 flex items-center gap-2 border-b border-gray-300 pb-2">สมาชิกในทีม ({teamMembers.length})</h3>
+                                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-h-60 overflow-y-auto pr-2">
+                                                        {teamMembers.map((member) => (
+                                                            <div key={member.id} className={`p-3 rounded-xl flex flex-col items-center gap-2 ${styles.neuFlat}`}>
+                                                                <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                                                                    {member.photoBase64 ? <img src={member.photoBase64} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400"><UserIcon size={20} /></div>}
+                                                                </div>
+                                                                <span className="text-[10px] font-bold text-blue-900 truncate w-full text-center">{member.displayName || 'Unknown'}</span>
+                                                            </div>
+                                                        ))}
                                                     </div>
                                                 </div>
-                                                {item.status === 'edit' && <div className="mt-3 animate-fadeIn"><input type="text" placeholder="ระบุเหตุผลที่ต้องแก้ไข..." value={item.note} onChange={(e) => handleNoteChange(item.id, e.target.value)} className={`w-full px-4 py-2 text-sm ${styles.neuPressed} text-red-600 placeholder-red-300 outline-none bg-transparent`} /></div>}
+
+                                                <button onClick={handleLeaveTeam} className="w-full py-3 bg-red-500 text-white font-bold rounded-xl shadow-md hover:bg-red-600 transition-colors mt-8">ออกจากทีม</button>
                                             </div>
-                                        ))}
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center space-y-6 py-6">
+                                                <div className="text-center text-gray-500 text-sm">กรอกรหัสทีมเพื่อเข้าร่วมทำงานกับเพื่อนร่วมงาน</div>
+                                                <div className="flex w-full max-w-sm gap-2">
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="รหัสทีม (เช่น SHOP-A)" 
+                                                        id="teamInput"
+                                                        className={`flex-1 pl-4 pr-4 py-3 text-center text-lg font-bold tracking-widest ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200 rounded-xl bg-transparent placeholder-gray-400 uppercase`}
+                                                    />
+                                                    <button onClick={() => handleJoinTeam(document.getElementById('teamInput').value.toUpperCase())} className={`px-6 py-3 rounded-xl text-blue-900 font-bold ${styles.neuFlat} hover:translate-y-[-2px] active:translate-y-[0px]`}>เข้าร่วม</button>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                                <div className="pt-4 pb-8">
-                                    <h2 className="text-lg font-semibold text-blue-900 ml-1 mb-2">ตัวอย่างข้อความ</h2>
-                                    <div className={`w-full p-4 min-h-[200px] text-sm md:text-base font-mono bg-gray-100/50 ${styles.neuPressed} text-gray-700 whitespace-pre-line leading-relaxed`}>{generatedText}</div>
-                                    <button onClick={copyToClipboard} className={`mt-6 w-full py-4 text-blue-900 font-bold text-lg rounded-xl flex items-center justify-center gap-2 ${isCopied ? 'shadow-[inset_4px_4px_8px_rgb(163,177,198,0.6),inset_-4px_-4px_8px_rgba(255,255,255,0.8)] bg-blue-50' : 'shadow-[6px_6px_12px_rgb(163,177,198,0.6),-6px_-6px_12px_rgba(255,255,255,0.8)] hover:shadow-[8px_8px_16px_rgb(163,177,198,0.7),-8px_-8px_16px_rgba(255,255,255,0.9)] active:shadow-[inset_4px_4px_8px_rgb(163,177,198,0.6),inset_-4px_-4px_8px_rgba(255,255,255,0.8)]'} transition-all duration-300 cursor-pointer`}>{isCopied ? <span className="flex items-center gap-2"><CheckIcon size={24} /> คัดลอกเรียบร้อย!</span> : <span className="flex items-center gap-2"><CopyIcon size={24} /> คัดลอกข้อความ</span>}</button>
-                                </div>
-                            </div>
-                        )}
+                            )}
 
-                        {currentView === 'history' && (
-                            <div className="animate-fadeIn h-full flex flex-col">
-                                <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-                                    <div className="flex items-center gap-2 w-full sm:w-auto">
-                                        <button onClick={() => { setCurrentView('form'); setIsClearingHistory(false); }} className="p-2 -ml-2 text-gray-500 hover:text-blue-900 transition-colors"><ArrowLeftIcon size={24} /></button>
+                            {/* VIEW: PROFILE MANAGEMENT */}
+                            {currentView === 'profile' && (
+                                <div className="animate-fadeIn space-y-6">
+                                    <h2 className="text-xl font-bold text-blue-900 mb-4 flex items-center gap-2"><UserSettingsIcon/> จัดการโปรไฟล์</h2>
+                                    <div className={`p-8 rounded-2xl ${styles.neuFlat}`}>
+                                        <form onSubmit={handleUpdateProfile} className="space-y-6 max-w-md mx-auto">
+                                            <div className="flex flex-col items-center mb-6 space-y-4">
+                                                <div className={`w-32 h-32 rounded-full overflow-hidden ${styles.neuPressed} border-4 border-[#E0E5EC] flex items-center justify-center relative group`}>
+                                                    {editPhotoBase64 ? <img src={editPhotoBase64} alt="Profile" className="w-full h-full object-cover" /> : <UserIcon size={48} className="text-gray-400" />}
+                                                </div>
+                                                
+                                                <input 
+                                                    type="file" 
+                                                    accept="image/*" 
+                                                    ref={profileImageInputRef}
+                                                    onChange={handleProfileImageChange}
+                                                    className="hidden"
+                                                />
+                                                <button 
+                                                    type="button"
+                                                    onClick={() => profileImageInputRef.current.click()}
+                                                    className="text-sm text-blue-600 hover:text-blue-800 font-bold flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl border border-blue-100 shadow-sm"
+                                                >
+                                                    <UploadIcon size={16} /> อัปโหลดรูป
+                                                </button>
+                                            </div>
+                                            
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-gray-600 ml-1">ชื่อผู้ใช้งาน</label>
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div>
+                                                    <input type="text" value={editDisplayName} onChange={(e) => setEditDisplayName(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200 rounded-xl bg-transparent`} placeholder="ชื่อที่ใช้แสดง" />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-gray-600 ml-1">เปลี่ยนรหัสผ่าน</label>
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><LockIcon size={18} /></div>
+                                                    <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200 rounded-xl bg-transparent`} placeholder="เว้นว่างหากไม่เปลี่ยน" />
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" disabled={!isDirty} className={`w-full py-3 rounded-xl font-bold ${isDirty ? 'text-blue-900 ' + styles.neuFlat + ' hover:translate-y-[-2px] active:translate-y-[0px]' : 'text-gray-400 bg-gray-200 cursor-not-allowed'}`}>บันทึก</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* VIEW: FORM (HOME) */}
+                            {currentView === 'form' && (
+                                <div className="animate-fadeIn space-y-8">
+                                    <div className={`p-6 rounded-2xl ${styles.neuFlat}`}>
+                                        <div className="space-y-4">
+                                            <div className="flex justify-between items-center"><h2 className="text-lg font-semibold text-blue-900 ml-1">ข้อมูลทั่วไป</h2>{currentId && <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-lg border border-orange-200">กำลังแก้ไขข้อมูลเก่า</span>}</div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><StoreIcon size={18} /></div><input type="text" placeholder="ชื่อร้านค้า" value={storeName} onChange={(e) => setStoreName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !storeName.trim() ? styles.inputError : styles.neuPressed}`} /></div>
+                                                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><FileTextIcon size={18} /></div><input type="text" placeholder="เลข INV" value={invNumber} onChange={(e) => setInvNumber(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !invNumber.trim() ? styles.inputError : styles.neuPressed}`} /></div>
+                                                <div className="relative md:col-span-2"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div><input type="text" placeholder="ชื่อลูกค้า" value={customerName} onChange={(e) => setCustomerName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !customerName.trim() ? styles.inputError : styles.neuPressed}`} /></div>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4 py-4">
+                                            <button onClick={handleSaveDraft} className={`${styles.btn} ${styles.neuFlat} py-3 gap-2 text-emerald-700 hover:text-emerald-900 active:text-emerald-800`}><SaveIcon size={20} /><span>จัดเก็บชั่วคราว</span></button>
+                                            <button onClick={handleResetOrDelete} className={`${styles.btn} ${styles.neuFlat} py-3 text-red-600 hover:text-red-800 active:text-red-700 gap-2`}>{currentId ? <><TrashIcon size={20} /><span>ลบรายการนี้</span></> : <><XIcon size={20} /><span>ผ่าน/ยกเลิก</span></>}</button>
+                                        </div>
+                                    </div>
+
+                                    <div className={`p-6 rounded-2xl ${styles.neuFlat}`}>
+                                        <div className="space-y-2 mb-4">
+                                            <div className="flex justify-between items-center text-xs font-semibold text-blue-900 px-1"><span>ความคืบหน้า</span><span className={percentage === 100 ? (color.includes('emerald') ? 'text-emerald-600' : 'text-orange-600') : ''}>{emoji} {Math.round(percentage)}%</span></div>
+                                            <div className={`w-full h-3 rounded-full ${styles.neuPressed} overflow-hidden`}><div className={`h-full rounded-full transition-all duration-500 ease-out ${color}`} style={{ width: `${percentage}%` }}></div></div>
+                                        </div>
+                                        <div className="space-y-6">
+                                            <h2 className="text-lg font-semibold text-blue-900 ml-1">รายการตรวจสอบเอกสาร</h2>
+                                            <div className="space-y-4">
+                                                {checklist.map((item) => (
+                                                    <div key={item.id} className={`p-4 rounded-2xl bg-[#E0E5EC] shadow-[6px_6px_12px_rgb(163,177,198,0.5),-6px_-6px_12px_rgba(255,255,255,0.8)] transition-all`}>
+                                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                                                            <div className="flex-1 flex items-start"><span className="font-medium text-gray-700 text-sm md:text-base mr-2 min-w-[20px]">{item.id}.</span><span className="font-medium text-gray-700 text-sm md:text-base whitespace-pre-line">{item.label}</span></div>
+                                                            <div className="flex flex-wrap gap-2 shrink-0">
+                                                                <div onClick={() => handleStatusChange(item.id, 'passed')} className={styles.statusBtn(item.status === 'passed', 'bg-blue-900')}><span className="flex items-center gap-1"><CheckIcon size={14}/> ผ่าน</span></div>
+                                                                <div onClick={() => handleStatusChange(item.id, 'pending')} className={styles.statusBtn(item.status === 'pending', 'bg-gray-500')}><span className="flex items-center gap-1"><ClockIcon size={14}/> รอ</span></div>
+                                                                <div onClick={() => handleStatusChange(item.id, 'edit')} className={styles.statusBtn(item.status === 'edit', 'bg-orange-500')}><span className="flex items-center gap-1"><Edit3Icon size={14}/> แก้ไข</span></div>
+                                                            </div>
+                                                        </div>
+                                                        {item.status === 'edit' && <div className="mt-3 animate-fadeIn"><input type="text" placeholder="ระบุเหตุผลที่ต้องแก้ไข..." value={item.note} onChange={(e) => handleNoteChange(item.id, e.target.value)} className={`w-full px-4 py-2 text-sm ${styles.neuPressed} text-red-600 placeholder-red-300 outline-none bg-transparent`} /></div>}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className={`p-6 rounded-2xl ${styles.neuFlat}`}>
+                                        <h2 className="text-lg font-semibold text-blue-900 ml-1 mb-2">ตัวอย่างข้อความ</h2>
+                                        <div className={`w-full p-4 min-h-[200px] text-sm md:text-base font-mono bg-gray-100/50 ${styles.neuPressed} text-gray-700 whitespace-pre-line leading-relaxed mb-4`}>{generatedText}</div>
+                                        <button onClick={copyToClipboard} className={`w-full py-4 text-blue-900 font-bold text-lg rounded-xl flex items-center justify-center gap-2 ${isCopied ? 'shadow-[inset_4px_4px_8px_rgb(163,177,198,0.6),inset_-4px_-4px_8px_rgba(255,255,255,0.8)] bg-blue-50' : 'shadow-[6px_6px_12px_rgb(163,177,198,0.6),-6px_-6px_12px_rgba(255,255,255,0.8)] hover:shadow-[8px_8px_16px_rgb(163,177,198,0.7),-8px_-8px_16px_rgba(255,255,255,0.9)] active:shadow-[inset_4px_4px_8px_rgb(163,177,198,0.6),inset_-4px_-4px_8px_rgba(255,255,255,0.8)]'} transition-all duration-300 cursor-pointer`}>{isCopied ? <span className="flex items-center gap-2"><CheckIcon size={24} /> คัดลอกเรียบร้อย!</span> : <span className="flex items-center gap-2"><CopyIcon size={24} /> คัดลอกข้อความ</span>}</button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* VIEW: HISTORY */}
+                            {currentView === 'history' && (
+                                <div className="animate-fadeIn h-full flex flex-col">
+                                    <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
                                         <h2 className="text-lg font-semibold text-blue-900">รายการที่บันทึกไว้ {teamCode && <span className="text-xs bg-blue-100 px-2 py-0.5 rounded-lg ml-1">ทีม {teamCode}</span>}</h2>
+                                        <div className="flex items-center gap-2 self-end">
+                                            {/* Layout Switcher */}
+                                            <div className={`flex p-1 rounded-lg ${styles.neuPressed} mr-2`}>
+                                                <button onClick={() => setLayoutMode('grid')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'grid' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="ตาราง"><LayoutGridIcon size={18} /></button>
+                                                <button onClick={() => setLayoutMode('list')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'list' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="รายการ"><LayoutListIcon size={18} /></button>
+                                                <button onClick={() => setLayoutMode('compact')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'compact' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="กะทัดรัด"><LayoutCompactIcon size={18} /></button>
+                                            </div>
+                                            <input type="file" accept=".csv" ref={fileInputRef} onChange={handleImportCSV} className="hidden" />
+                                            <button onClick={triggerImport} className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="นำเข้าไฟล์ CSV"><UploadIcon size={20} /></button>
+                                            <button onClick={handleExportCSV} className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="ส่งออกเป็น CSV"><DownloadIcon size={20} /></button>
+                                            {history.length > 0 && (<button onClick={() => setIsClearingHistory(prev => !prev)} className="text-red-400 hover:text-red-600 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="ล้างประวัติทั้งหมด"><TrashIcon size={20} /></button>)}
+                                        </div>
                                     </div>
+                                    {isClearingHistory && (
+                                        <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 animate-bounceIn">
+                                            <div className="flex items-start gap-3"><div className="text-red-500 mt-1"><AlertIcon size={24}/></div><div className="flex-1"><h3 className="font-bold text-red-800 mb-1">แน่ใจไหม?</h3><p className="text-sm text-red-600 mb-3">คุณต้องการล้างประวัติ{teamCode ? `ของทีม ${teamCode}` : 'ส่วนตัว'} ทั้งหมดหรือไม่</p><div className="flex gap-3"><button onClick={handleClearHistory} className="px-4 py-2 bg-red-500 text-white text-sm rounded-lg shadow-md hover:bg-red-600 transition-colors">ใช่ ฉันต้องการล้างประวัติ</button><button onClick={() => setIsClearingHistory(false)} className="px-4 py-2 bg-white text-gray-600 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">กดผิด ยังไม่ต้องลบ</button></div></div></div>
+                                        </div>
+                                    )}
+                                    <div className="relative mb-6"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><SearchIcon size={18} /></div><input type="text" placeholder="ค้นหา (ชื่อร้าน, เลข INV, ชื่อลูกค้า)..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} /></div>
                                     
-                                    <div className="flex items-center gap-2 self-end">
-                                        {/* Layout Switcher */}
-                                        <div className={`flex p-1 rounded-lg ${styles.neuPressed} mr-2`}>
-                                            <button onClick={() => setLayoutMode('grid')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'grid' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="ตาราง"><LayoutGridIcon size={18} /></button>
-                                            <button onClick={() => setLayoutMode('list')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'list' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="รายการ"><LayoutListIcon size={18} /></button>
-                                            <button onClick={() => setLayoutMode('compact')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'compact' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="กะทัดรัด"><LayoutCompactIcon size={18} /></button>
-                                        </div>
-
-                                        <input type="file" accept=".csv" ref={fileInputRef} onChange={handleImportCSV} className="hidden" />
-                                        <button onClick={triggerImport} className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="นำเข้าไฟล์ CSV"><UploadIcon size={20} /></button>
-                                        <button onClick={handleExportCSV} className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="ส่งออกเป็น CSV"><DownloadIcon size={20} /></button>
-                                        {history.length > 0 && (<button onClick={() => setIsClearingHistory(prev => !prev)} className="text-red-400 hover:text-red-600 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="ล้างประวัติทั้งหมด"><TrashIcon size={20} /></button>)}
+                                    {/* History List - Reverted to Clean Soft Neumorphism (No Border) but added ample padding to container */}
+                                    <div className={`flex-1 overflow-y-auto no-scrollbar p-6 ${layoutMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'space-y-6'}`}>
+                                        {filteredHistory.length === 0 ? (<div className="text-center py-10 text-gray-400 col-span-full"><p>ไม่พบรายการที่บันทึกไว้</p></div>) : (filteredHistory.map((item) => (
+                                            <div 
+                                                key={item.id} 
+                                                onClick={() => handleRestore(item)} 
+                                                className={`
+                                                    ${styles.neuFlat} cursor-pointer group active:scale-[0.98] transition-all duration-200 hover:shadow-[10px_10px_20px_rgb(163,177,198,0.6),-10px_-10px_20px_rgba(255,255,255,0.7)]
+                                                    ${layoutMode === 'compact' ? 'p-6 flex items-center justify-between' : 'p-8 flex flex-col'}
+                                                `}
+                                            >
+                                                {layoutMode === 'compact' ? (
+                                                    <>
+                                                        <div className="flex-1 min-w-0 pr-4">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="font-bold text-blue-900 truncate">{item.storeName || '-'}</span>
+                                                                <span className="text-xs bg-gray-200 px-1.5 rounded text-gray-600">{item.invNumber}</span>
+                                                            </div>
+                                                            <div className="text-sm text-gray-600 truncate">{item.customerName}</div>
+                                                        </div>
+                                                        <div className="text-right text-xs text-gray-400 whitespace-nowrap">
+                                                            <div>{item.timestamp.split('-')[0]}</div>
+                                                            <div className="text-[10px]">{item.lastEditedBy || 'Unknown'}</div>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <div className="space-y-2 mb-3">
+                                                            <div className="flex justify-between items-start">
+                                                                <h3 className="font-bold text-lg text-blue-900 line-clamp-1">{item.storeName || '-'}</h3>
+                                                                <span className="text-xs font-mono bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-100">{item.invNumber || 'NO INV'}</span>
+                                                            </div>
+                                                            <p className="text-gray-700 font-medium flex items-center gap-2"><UserIcon size={14} className="text-gray-400"/> {item.customerName || '-'}</p>
+                                                        </div>
+                                                        <div className="mt-auto pt-3 border-t border-gray-200/50 flex justify-between items-center text-xs text-gray-400">
+                                                            <span className="italic flex items-center gap-1">
+                                                                แก้ไข: {item.timestamp} {item.lastEditedBy && `โดย ${item.lastEditedBy}`}
+                                                            </span>
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
+                                        )))}
                                     </div>
                                 </div>
-                                {isClearingHistory && (
-                                    <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 animate-bounceIn">
-                                        <div className="flex items-start gap-3"><div className="text-red-500 mt-1"><AlertIcon size={24}/></div><div className="flex-1"><h3 className="font-bold text-red-800 mb-1">แน่ใจไหม?</h3><p className="text-sm text-red-600 mb-3">คุณต้องการล้างประวัติ{teamCode ? `ของทีม ${teamCode}` : 'ส่วนตัว'} ทั้งหมดหรือไม่</p><div className="flex gap-3"><button onClick={handleClearHistory} className="px-4 py-2 bg-red-500 text-white text-sm rounded-lg shadow-md hover:bg-red-600 transition-colors">ใช่ ฉันต้องการล้างประวัติ</button><button onClick={() => setIsClearingHistory(false)} className="px-4 py-2 bg-white text-gray-600 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">กดผิด ยังไม่ต้องลบ</button></div></div></div>
-                                    </div>
-                                )}
-                                <div className="relative mb-6"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><SearchIcon size={18} /></div><input type="text" placeholder="ค้นหา (ชื่อร้าน, เลข INV, ชื่อลูกค้า)..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} /></div>
-                                
-                                {/* History List with Layout Modes */}
-                                <div className={`flex-1 overflow-y-auto no-scrollbar pb-8 ${layoutMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-4' : 'space-y-4'}`}>
-                                    {filteredHistory.length === 0 ? (<div className="text-center py-10 text-gray-400 col-span-full"><p>ไม่พบรายการที่บันทึกไว้</p></div>) : (filteredHistory.map((item) => (
-                                        <div 
-                                            key={item.id} 
-                                            onClick={() => handleRestore(item)} 
-                                            className={`
-                                                ${styles.neuFlat} cursor-pointer group active:scale-[0.98] transition-all duration-200 border border-[#E0E5EC] hover:border-blue-100
-                                                ${layoutMode === 'compact' ? 'p-3 flex items-center justify-between' : 'p-5 flex flex-col'}
-                                            `}
-                                        >
-                                            {layoutMode === 'compact' ? (
-                                                <>
-                                                    <div className="flex-1 min-w-0 pr-4">
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="font-bold text-blue-900 truncate">{item.storeName || '-'}</span>
-                                                            <span className="text-xs bg-gray-200 px-1.5 rounded text-gray-600">{item.invNumber}</span>
-                                                        </div>
-                                                        <div className="text-sm text-gray-600 truncate">{item.customerName}</div>
-                                                    </div>
-                                                    <div className="text-right text-xs text-gray-400 whitespace-nowrap">
-                                                        <div>{item.timestamp.split('-')[0]}</div>
-                                                        <div className="text-[10px]">{item.lastEditedBy || 'Unknown'}</div>
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <div className="space-y-2 mb-3">
-                                                        <div className="flex justify-between items-start">
-                                                            <h3 className="font-bold text-lg text-blue-900 line-clamp-1">{item.storeName || '-'}</h3>
-                                                            <span className="text-xs font-mono bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-100">{item.invNumber || 'NO INV'}</span>
-                                                        </div>
-                                                        <p className="text-gray-700 font-medium flex items-center gap-2"><UserIcon size={14} className="text-gray-400"/> {item.customerName || '-'}</p>
-                                                    </div>
-                                                    <div className="mt-auto pt-3 border-t border-gray-200/50 flex justify-between items-center text-xs text-gray-400">
-                                                        <span className="italic flex items-center gap-1">
-                                                            แก้ไข: {item.timestamp} {item.lastEditedBy && `โดย ${item.lastEditedBy}`}
-                                                        </span>
-                                                    </div>
-                                                </>
-                                            )}
-                                        </div>
-                                    )))}
-                                </div>
-                            </div>
-                        )}
-                        <div className="pt-6 mt-4 border-t border-gray-300/30 text-center"><p className="text-[10px] text-gray-400 font-light tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity select-none">vibe code by a.pete from zenity-x</p></div>
+                            )}
+                        </div>
                     </div>
                 </div>
             );
