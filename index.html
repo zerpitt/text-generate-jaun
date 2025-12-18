@@ -27,62 +27,7 @@
     <!-- Custom Font: Sarabun -->
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: 'Sarabun', sans-serif;
-            background-color: #E0E5EC;
-            overflow: hidden;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-fadeIn {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0.3);
-                opacity: 0;
-            }
-
-            50% {
-                transform: scale(1.05);
-                opacity: 1;
-            }
-
-            70% {
-                transform: scale(0.9);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .animate-bounceIn {
-            animation: bounceIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-        }
-
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -1047,140 +992,140 @@
 
 
 
-        {/* VIEW: FORM (HOME) */ }
-        {
-            currentView === 'form' && (
-                <div className="animate-fadeIn space-y-8">
-                    <div className={`p-6 rounded-2xl ${styles.neuFlat}`}>
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center"><h2 className="text-lg font-semibold text-blue-900 ml-1">ข้อมูลทั่วไป</h2>{currentId && <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-lg border border-orange-200">กำลังแก้ไขข้อมูลเก่า</span>}</div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><StoreIcon size={18} /></div><input type="text" placeholder="ชื่อร้านค้า" value={storeName} onChange={(e) => setStoreName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !storeName.trim() ? styles.inputError : styles.neuPressed}`} /></div>
-                                <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><FileTextIcon size={18} /></div><input type="text" placeholder="เลข INV" value={invNumber} onChange={(e) => setInvNumber(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !invNumber.trim() ? styles.inputError : styles.neuPressed}`} /></div>
-                                <div className="relative md:col-span-2"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div><input type="text" placeholder="ชื่อลูกค้า" value={customerName} onChange={(e) => setCustomerName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !customerName.trim() ? styles.inputError : styles.neuPressed}`} /></div>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4 py-4">
-                            <button onClick={handleSaveDraft} className={`${styles.btn} ${styles.neuFlat} py-3 gap-2 text-emerald-700 hover:text-emerald-900 active:text-emerald-800`}><SaveIcon size={20} /><span>จัดเก็บชั่วคราว</span></button>
-                            <button onClick={handleResetOrDelete} className={`${styles.btn} ${styles.neuFlat} py-3 text-red-600 hover:text-red-800 active:text-red-700 gap-2`}>{currentId ? <><TrashIcon size={20} /><span>ลบรายการนี้</span></> : <><XIcon size={20} /><span>ผ่าน/ยกเลิก</span></>}</button>
-                        </div>
-                    </div>
-
-                    <div className={`p-6 rounded-2xl ${styles.neuFlat}`}>
-                        <div className="space-y-2 mb-4">
-                            <div className="flex justify-between items-center text-xs font-semibold text-blue-900 px-1"><span>ความคืบหน้า</span><span className={percentage === 100 ? (color.includes('emerald') ? 'text-emerald-600' : 'text-orange-600') : ''}>{emoji} {Math.round(percentage)}%</span></div>
-                            <div className={`w-full h-3 rounded-full ${styles.neuPressed} overflow-hidden`}><div className={`h-full rounded-full transition-all duration-500 ease-out ${color}`} style={{ width: `${percentage}%` }}></div></div>
-                        </div>
-                        <div className="space-y-6">
-                            <h2 className="text-lg font-semibold text-blue-900 ml-1">รายการตรวจสอบเอกสาร</h2>
-                            <div className="space-y-4">
-                                {checklist.map((item) => (
-                                    <div key={item.id} className={`p-4 rounded-2xl bg-[#E0E5EC] shadow-[6px_6px_12px_rgb(163,177,198,0.5),-6px_-6px_12px_rgba(255,255,255,0.8)] transition-all`}>
-                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                                            <div className="flex-1 flex items-start"><span className="font-medium text-gray-700 text-sm md:text-base mr-2 min-w-[20px]">{item.id}.</span><span className="font-medium text-gray-700 text-sm md:text-base whitespace-pre-line">{item.label}</span></div>
-                                            <div className="flex flex-wrap gap-2 shrink-0">
-                                                {(item.supervisorOnly && userRole !== 'admin') ? (
-                                                    <div className="h-8 px-4 text-xs rounded-lg flex items-center gap-2 text-gray-400 bg-gray-200 cursor-not-allowed select-none">
-                                                        <LockIcon size={14} /> <span>เฉพาะหัวหน้า</span>
-                                                    </div>
-                                                ) : (
-                                                    <>
-                                                        <div onClick={() => handleStatusChange(item.id, 'passed')} className={styles.statusBtn(item.status === 'passed', 'bg-blue-900')}><span className="flex items-center gap-1"><CheckIcon size={14} /> ผ่าน</span></div>
-                                                        <div onClick={() => handleStatusChange(item.id, 'pending')} className={styles.statusBtn(item.status === 'pending', 'bg-gray-500')}><span className="flex items-center gap-1"><ClockIcon size={14} /> รอ</span></div>
-                                                        <div onClick={() => handleStatusChange(item.id, 'edit')} className={styles.statusBtn(item.status === 'edit', 'bg-orange-500')}><span className="flex items-center gap-1"><Edit3Icon size={14} /> แก้ไข</span></div>
-                                                    </>
-                                                )}
+                            {/* VIEW: FORM (HOME) */}
+                            {
+                                currentView === 'form' && (
+                                    <div className="animate-fadeIn space-y-8">
+                                        <div className={`p-6 rounded-2xl ${styles.neuFlat}`}>
+                                            <div className="space-y-4">
+                                                <div className="flex justify-between items-center"><h2 className="text-lg font-semibold text-blue-900 ml-1">ข้อมูลทั่วไป</h2>{currentId && <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-lg border border-orange-200">กำลังแก้ไขข้อมูลเก่า</span>}</div>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><StoreIcon size={18} /></div><input type="text" placeholder="ชื่อร้านค้า" value={storeName} onChange={(e) => setStoreName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !storeName.trim() ? styles.inputError : styles.neuPressed}`} /></div>
+                                                    <div className="relative"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><FileTextIcon size={18} /></div><input type="text" placeholder="เลข INV" value={invNumber} onChange={(e) => setInvNumber(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !invNumber.trim() ? styles.inputError : styles.neuPressed}`} /></div>
+                                                    <div className="relative md:col-span-2"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><UserIcon size={18} /></div><input type="text" placeholder="ชื่อลูกค้า" value={customerName} onChange={(e) => setCustomerName(e.target.value)} className={`w-full pl-10 pr-4 py-3 outline-none transition-all bg-transparent rounded-xl ${showRestoredHighlight && !customerName.trim() ? styles.inputError : styles.neuPressed}`} /></div>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4 py-4">
+                                                <button onClick={handleSaveDraft} className={`${styles.btn} ${styles.neuFlat} py-3 gap-2 text-emerald-700 hover:text-emerald-900 active:text-emerald-800`}><SaveIcon size={20} /><span>จัดเก็บชั่วคราว</span></button>
+                                                <button onClick={handleResetOrDelete} className={`${styles.btn} ${styles.neuFlat} py-3 text-red-600 hover:text-red-800 active:text-red-700 gap-2`}>{currentId ? <><TrashIcon size={20} /><span>ลบรายการนี้</span></> : <><XIcon size={20} /><span>ผ่าน/ยกเลิก</span></>}</button>
                                             </div>
                                         </div>
-                                        {item.status === 'edit' && <div className="mt-3 animate-fadeIn"><input type="text" placeholder="ระบุเหตุผลที่ต้องแก้ไข..." value={item.note} onChange={(e) => handleNoteChange(item.id, e.target.value)} className={`w-full px-4 py-2 text-sm ${styles.neuPressed} text-red-600 placeholder-red-300 outline-none bg-transparent`} /></div>}
+
+                                        <div className={`p-6 rounded-2xl ${styles.neuFlat}`}>
+                                            <div className="space-y-2 mb-4">
+                                                <div className="flex justify-between items-center text-xs font-semibold text-blue-900 px-1"><span>ความคืบหน้า</span><span className={percentage === 100 ? (color.includes('emerald') ? 'text-emerald-600' : 'text-orange-600') : ''}>{emoji} {Math.round(percentage)}%</span></div>
+                                                <div className={`w-full h-3 rounded-full ${styles.neuPressed} overflow-hidden`}><div className={`h-full rounded-full transition-all duration-500 ease-out ${color}`} style={{ width: `${percentage}%` }}></div></div>
+                                            </div>
+                                            <div className="space-y-6">
+                                                <h2 className="text-lg font-semibold text-blue-900 ml-1">รายการตรวจสอบเอกสาร</h2>
+                                                <div className="space-y-4">
+                                                    {checklist.map((item) => (
+                                                        <div key={item.id} className={`p-4 rounded-2xl bg-[#E0E5EC] shadow-[6px_6px_12px_rgb(163,177,198,0.5),-6px_-6px_12px_rgba(255,255,255,0.8)] transition-all`}>
+                                                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                                                                <div className="flex-1 flex items-start"><span className="font-medium text-gray-700 text-sm md:text-base mr-2 min-w-[20px]">{item.id}.</span><span className="font-medium text-gray-700 text-sm md:text-base whitespace-pre-line">{item.label}</span></div>
+                                                                <div className="flex flex-wrap gap-2 shrink-0">
+                                                                    {(item.supervisorOnly && userRole !== 'admin') ? (
+                                                                        <div className="h-8 px-4 text-xs rounded-lg flex items-center gap-2 text-gray-400 bg-gray-200 cursor-not-allowed select-none">
+                                                                            <LockIcon size={14} /> <span>เฉพาะหัวหน้า</span>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <>
+                                                                            <div onClick={() => handleStatusChange(item.id, 'passed')} className={styles.statusBtn(item.status === 'passed', 'bg-blue-900')}><span className="flex items-center gap-1"><CheckIcon size={14} /> ผ่าน</span></div>
+                                                                            <div onClick={() => handleStatusChange(item.id, 'pending')} className={styles.statusBtn(item.status === 'pending', 'bg-gray-500')}><span className="flex items-center gap-1"><ClockIcon size={14} /> รอ</span></div>
+                                                                            <div onClick={() => handleStatusChange(item.id, 'edit')} className={styles.statusBtn(item.status === 'edit', 'bg-orange-500')}><span className="flex items-center gap-1"><Edit3Icon size={14} /> แก้ไข</span></div>
+                                                                        </>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                            {item.status === 'edit' && <div className="mt-3 animate-fadeIn"><input type="text" placeholder="ระบุเหตุผลที่ต้องแก้ไข..." value={item.note} onChange={(e) => handleNoteChange(item.id, e.target.value)} className={`w-full px-4 py-2 text-sm ${styles.neuPressed} text-red-600 placeholder-red-300 outline-none bg-transparent`} /></div>}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={`p-6 rounded-2xl ${styles.neuFlat}`}>
+                                            <h2 className="text-lg font-semibold text-blue-900 ml-1 mb-2">ตัวอย่างข้อความ</h2>
+                                            <div className={`w-full p-4 min-h-[200px] text-sm md:text-base font-mono bg-gray-100/50 ${styles.neuPressed} text-gray-700 whitespace-pre-line leading-relaxed mb-4`}>{generatedText}</div>
+                                            <button onClick={copyToClipboard} className={`w-full py-4 text-blue-900 font-bold text-lg rounded-xl flex items-center justify-center gap-2 ${isCopied ? 'shadow-[inset_4px_4px_8px_rgb(163,177,198,0.6),inset_-4px_-4px_8px_rgba(255,255,255,0.8)] bg-blue-50' : 'shadow-[6px_6px_12px_rgb(163,177,198,0.6),-6px_-6px_12px_rgba(255,255,255,0.8)] hover:shadow-[8px_8px_16px_rgb(163,177,198,0.7),-8px_-8px_16px_rgba(255,255,255,0.9)] active:shadow-[inset_4px_4px_8px_rgb(163,177,198,0.6),inset_-4px_-4px_8px_rgba(255,255,255,0.8)]'} transition-all duration-300 cursor-pointer`}>{isCopied ? <span className="flex items-center gap-2"><CheckIcon size={24} /> คัดลอกเรียบร้อย!</span> : <span className="flex items-center gap-2"><CopyIcon size={24} /> คัดลอกข้อความ</span>}</button>
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+                                )
+                            }
 
-                    <div className={`p-6 rounded-2xl ${styles.neuFlat}`}>
-                        <h2 className="text-lg font-semibold text-blue-900 ml-1 mb-2">ตัวอย่างข้อความ</h2>
-                        <div className={`w-full p-4 min-h-[200px] text-sm md:text-base font-mono bg-gray-100/50 ${styles.neuPressed} text-gray-700 whitespace-pre-line leading-relaxed mb-4`}>{generatedText}</div>
-                        <button onClick={copyToClipboard} className={`w-full py-4 text-blue-900 font-bold text-lg rounded-xl flex items-center justify-center gap-2 ${isCopied ? 'shadow-[inset_4px_4px_8px_rgb(163,177,198,0.6),inset_-4px_-4px_8px_rgba(255,255,255,0.8)] bg-blue-50' : 'shadow-[6px_6px_12px_rgb(163,177,198,0.6),-6px_-6px_12px_rgba(255,255,255,0.8)] hover:shadow-[8px_8px_16px_rgb(163,177,198,0.7),-8px_-8px_16px_rgba(255,255,255,0.9)] active:shadow-[inset_4px_4px_8px_rgb(163,177,198,0.6),inset_-4px_-4px_8px_rgba(255,255,255,0.8)]'} transition-all duration-300 cursor-pointer`}>{isCopied ? <span className="flex items-center gap-2"><CheckIcon size={24} /> คัดลอกเรียบร้อย!</span> : <span className="flex items-center gap-2"><CopyIcon size={24} /> คัดลอกข้อความ</span>}</button>
-                    </div>
-                </div>
-            )
-        }
+                            {/* VIEW: HISTORY */}
+                            {
+                                currentView === 'history' && (
+                                    <div className="animate-fadeIn h-full flex flex-col">
+                                        <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+                                            <h2 className="text-lg font-semibold text-blue-900">รายการที่บันทึกไว้ {teamCode && <span className="text-xs bg-blue-100 px-2 py-0.5 rounded-lg ml-1">ทีม {teamCode}</span>}</h2>
+                                            <div className="flex items-center gap-2 self-end">
+                                                {/* Layout Switcher */}
+                                                <div className={`flex p-1 rounded-lg ${styles.neuPressed} mr-2`}>
+                                                    <button onClick={() => setLayoutMode('grid')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'grid' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="ตาราง"><LayoutGridIcon size={18} /></button>
+                                                    <button onClick={() => setLayoutMode('list')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'list' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="รายการ"><LayoutListIcon size={18} /></button>
+                                                    <button onClick={() => setLayoutMode('compact')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'compact' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="กะทัดรัด"><LayoutCompactIcon size={18} /></button>
+                                                </div>
+                                                <input type="file" accept=".csv" ref={fileInputRef} onChange={handleImportCSV} className="hidden" />
+                                                <button onClick={triggerImport} className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="นำเข้าไฟล์ CSV"><UploadIcon size={20} /></button>
+                                                <button onClick={handleExportCSV} className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="ส่งออกเป็น CSV"><DownloadIcon size={20} /></button>
+                                                {history.length > 0 && (<button onClick={() => setIsClearingHistory(prev => !prev)} className="text-red-400 hover:text-red-600 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="ล้างประวัติทั้งหมด"><TrashIcon size={20} /></button>)}
+                                            </div>
+                                        </div>
+                                        {isClearingHistory && (
+                                            <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 animate-bounceIn">
+                                                <div className="flex items-start gap-3"><div className="text-red-500 mt-1"><AlertIcon size={24} /></div><div className="flex-1"><h3 className="font-bold text-red-800 mb-1">แน่ใจไหม?</h3><p className="text-sm text-red-600 mb-3">คุณต้องการล้างประวัติ{teamCode ? `ของทีม ${teamCode}` : 'ส่วนตัว'} ทั้งหมดหรือไม่</p><div className="flex gap-3"><button onClick={handleClearHistory} className="px-4 py-2 bg-red-500 text-white text-sm rounded-lg shadow-md hover:bg-red-600 transition-colors">ใช่ ฉันต้องการล้างประวัติ</button><button onClick={() => setIsClearingHistory(false)} className="px-4 py-2 bg-white text-gray-600 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">กดผิด ยังไม่ต้องลบ</button></div></div></div>
+                                            </div>
+                                        )}
+                                        <div className="relative mb-6"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><SearchIcon size={18} /></div><input type="text" placeholder="ค้นหา (ชื่อร้าน, เลข INV, ชื่อลูกค้า)..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} /></div>
 
-        {/* VIEW: HISTORY */ }
-        {
-            currentView === 'history' && (
-                <div className="animate-fadeIn h-full flex flex-col">
-                    <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-                        <h2 className="text-lg font-semibold text-blue-900">รายการที่บันทึกไว้ {teamCode && <span className="text-xs bg-blue-100 px-2 py-0.5 rounded-lg ml-1">ทีม {teamCode}</span>}</h2>
-                        <div className="flex items-center gap-2 self-end">
-                            {/* Layout Switcher */}
-                            <div className={`flex p-1 rounded-lg ${styles.neuPressed} mr-2`}>
-                                <button onClick={() => setLayoutMode('grid')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'grid' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="ตาราง"><LayoutGridIcon size={18} /></button>
-                                <button onClick={() => setLayoutMode('list')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'list' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="รายการ"><LayoutListIcon size={18} /></button>
-                                <button onClick={() => setLayoutMode('compact')} className={`p-1.5 rounded-md transition-all ${layoutMode === 'compact' ? 'bg-blue-100 text-blue-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`} title="กะทัดรัด"><LayoutCompactIcon size={18} /></button>
-                            </div>
-                            <input type="file" accept=".csv" ref={fileInputRef} onChange={handleImportCSV} className="hidden" />
-                            <button onClick={triggerImport} className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="นำเข้าไฟล์ CSV"><UploadIcon size={20} /></button>
-                            <button onClick={handleExportCSV} className="text-blue-600 hover:text-blue-800 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="ส่งออกเป็น CSV"><DownloadIcon size={20} /></button>
-                            {history.length > 0 && (<button onClick={() => setIsClearingHistory(prev => !prev)} className="text-red-400 hover:text-red-600 p-2 transition-colors bg-[#E0E5EC] shadow-[3px_3px_6px_rgb(163,177,198,0.5),-3px_-3px_6px_rgba(255,255,255,0.6)] rounded-lg active:shadow-[inset_2px_2px_4px_rgb(163,177,198,0.5),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]" title="ล้างประวัติทั้งหมด"><TrashIcon size={20} /></button>)}
-                        </div>
-                    </div>
-                    {isClearingHistory && (
-                        <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 animate-bounceIn">
-                            <div className="flex items-start gap-3"><div className="text-red-500 mt-1"><AlertIcon size={24} /></div><div className="flex-1"><h3 className="font-bold text-red-800 mb-1">แน่ใจไหม?</h3><p className="text-sm text-red-600 mb-3">คุณต้องการล้างประวัติ{teamCode ? `ของทีม ${teamCode}` : 'ส่วนตัว'} ทั้งหมดหรือไม่</p><div className="flex gap-3"><button onClick={handleClearHistory} className="px-4 py-2 bg-red-500 text-white text-sm rounded-lg shadow-md hover:bg-red-600 transition-colors">ใช่ ฉันต้องการล้างประวัติ</button><button onClick={() => setIsClearingHistory(false)} className="px-4 py-2 bg-white text-gray-600 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">กดผิด ยังไม่ต้องลบ</button></div></div></div>
-                        </div>
-                    )}
-                    <div className="relative mb-6"><div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><SearchIcon size={18} /></div><input type="text" placeholder="ค้นหา (ชื่อร้าน, เลข INV, ชื่อลูกค้า)..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`w-full pl-10 pr-4 py-3 ${styles.neuPressed} outline-none focus:ring-2 focus:ring-blue-200/50 transition-all bg-transparent`} /></div>
-
-                    {/* History List - Reverted to Clean Soft Neumorphism (No Border) but added ample padding to container */}
-                    <div className={`flex-1 overflow-y-auto no-scrollbar p-6 ${layoutMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'space-y-6'}`}>
-                        {filteredHistory.length === 0 ? (<div className="text-center py-10 text-gray-400 col-span-full"><p>ไม่พบรายการที่บันทึกไว้</p></div>) : (filteredHistory.map((item) => (
-                            <div
-                                key={item.id}
-                                onClick={() => handleRestore(item)}
-                                className={`
+                                        {/* History List - Reverted to Clean Soft Neumorphism (No Border) but added ample padding to container */}
+                                        <div className={`flex-1 overflow-y-auto no-scrollbar p-6 ${layoutMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'space-y-6'}`}>
+                                            {filteredHistory.length === 0 ? (<div className="text-center py-10 text-gray-400 col-span-full"><p>ไม่พบรายการที่บันทึกไว้</p></div>) : (filteredHistory.map((item) => (
+                                                <div
+                                                    key={item.id}
+                                                    onClick={() => handleRestore(item)}
+                                                    className={`
                                                     ${styles.neuFlat} cursor-pointer group active:scale-[0.98] transition-all duration-200 hover:shadow-[10px_10px_20px_rgb(163,177,198,0.6),-10px_-10px_20px_rgba(255,255,255,0.7)]
                                                     ${layoutMode === 'compact' ? 'p-6 flex items-center justify-between' : 'p-8 flex flex-col'}
                                                 `}
-                            >
-                                {layoutMode === 'compact' ? (
-                                    <>
-                                        <div className="flex-1 min-w-0 pr-4">
-                                            <div className="flex items-center gap-2">
-                                                <span className="font-bold text-blue-900 truncate">{item.storeName || '-'}</span>
-                                                <span className="text-xs bg-gray-200 px-1.5 rounded text-gray-600">{item.invNumber}</span>
-                                            </div>
-                                            <div className="text-sm text-gray-600 truncate">{item.customerName}</div>
+                                                >
+                                                    {layoutMode === 'compact' ? (
+                                                        <>
+                                                            <div className="flex-1 min-w-0 pr-4">
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="font-bold text-blue-900 truncate">{item.storeName || '-'}</span>
+                                                                    <span className="text-xs bg-gray-200 px-1.5 rounded text-gray-600">{item.invNumber}</span>
+                                                                </div>
+                                                                <div className="text-sm text-gray-600 truncate">{item.customerName}</div>
+                                                            </div>
+                                                            <div className="text-right text-xs text-gray-400 whitespace-nowrap">
+                                                                <div>{item.timestamp.split('-')[0]}</div>
+                                                                <div className="text-[10px]">{item.lastEditedBy || 'Unknown'}</div>
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div className="space-y-2 mb-3">
+                                                                <div className="flex justify-between items-start">
+                                                                    <h3 className="font-bold text-lg text-blue-900 line-clamp-1">{item.storeName || '-'}</h3>
+                                                                    <span className="text-xs font-mono bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-100">{item.invNumber || 'NO INV'}</span>
+                                                                </div>
+                                                                <p className="text-gray-700 font-medium flex items-center gap-2"><UserIcon size={14} className="text-gray-400" /> {item.customerName || '-'}</p>
+                                                            </div>
+                                                            <div className="mt-auto pt-3 border-t border-gray-200/50 flex justify-between items-center text-xs text-gray-400">
+                                                                <span className="italic flex items-center gap-1">
+                                                                    แก้ไข: {item.timestamp} {item.lastEditedBy && `โดย ${item.lastEditedBy}`}
+                                                                </span>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            )))}
                                         </div>
-                                        <div className="text-right text-xs text-gray-400 whitespace-nowrap">
-                                            <div>{item.timestamp.split('-')[0]}</div>
-                                            <div className="text-[10px]">{item.lastEditedBy || 'Unknown'}</div>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="space-y-2 mb-3">
-                                            <div className="flex justify-between items-start">
-                                                <h3 className="font-bold text-lg text-blue-900 line-clamp-1">{item.storeName || '-'}</h3>
-                                                <span className="text-xs font-mono bg-blue-50 text-blue-600 px-2 py-1 rounded border border-blue-100">{item.invNumber || 'NO INV'}</span>
-                                            </div>
-                                            <p className="text-gray-700 font-medium flex items-center gap-2"><UserIcon size={14} className="text-gray-400" /> {item.customerName || '-'}</p>
-                                        </div>
-                                        <div className="mt-auto pt-3 border-t border-gray-200/50 flex justify-between items-center text-xs text-gray-400">
-                                            <span className="italic flex items-center gap-1">
-                                                แก้ไข: {item.timestamp} {item.lastEditedBy && `โดย ${item.lastEditedBy}`}
-                                            </span>
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-                        )))}
-                    </div>
-                </div>
-            )
-        }
+                                    </div>
+                                )
+                            }
                         </div >
                     </div >
                 </div >
